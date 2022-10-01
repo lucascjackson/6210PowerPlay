@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -6,33 +6,28 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
-public class manipulators {
+public class Manipulators {
 
     private HardwareMap robot = null;
     //Lowest and Highest Encoder Positions
     public int lowest = 0;
     public int highest = 0;
-    //intake
-    public DcMotor intake1 = null;
-    public DcMotor intake2 = null;
-
     //lift
-    public DcMotor lift1 = null;
+    public DcMotor lift1;
+    public DcMotor lift2;
 
-    //outtake
-    public Servo outtake = null;
+    //claw
+    public Servo claw;
 
     //Hardware Map
-    public manipulators(HardwareMap robot) {
+    public Manipulators(HardwareMap robot) {
         this.robot = robot;
-        //intake mapping
-        intake1 = robot.get(DcMotor.class, "intake1");
-        intake2 = robot.get(DcMotor.class, "intake2");
         //lift mapping
         lift1 = robot.get(DcMotor.class, "lift1");
+        lift2 = robot.get(DcMotor.class, "lift2");
 
-        //outtake mapping
-        outtake = robot.get(Servo.class, "outtake");
+        //claw mapping
+        claw = robot.get(Servo.class, "claw");
 
         //lift Encoders
         lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -51,4 +46,16 @@ public class manipulators {
         }
     }
 
+    public void powerLift(double leftStickY){
+        lift1.setPower(leftStickY);
+        lift2.setPower(leftStickY);
+    }
+
+    public void clawOpen(){
+        claw.setPosition(0);
+    }
+
+    public void clawClose(){
+        claw.setPosition(1);
+    }
 }
