@@ -82,6 +82,17 @@ public class MainTeleOp extends OpMode {
 
         move.setPowers(motorPower);
 
+        //Lift MACROS
+        if (isPressed("2y", gamepad2.y)){
+            manip.liftToHeight(manip.setStartPos(), "low");
+        }
+        if (isPressed("2b", gamepad2.b)){
+            manip.liftToHeight(manip.setStartPos(), "mid");
+        }
+        if (isPressed("2a", gamepad2.a)) {
+            manip.liftToHeight(manip.setStartPos(), "high");
+        }
+        //Write a story about rishi the software guy
 
     }
 

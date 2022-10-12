@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import java.util.Objects;
+
 @Config
 public class Manipulators {
 
@@ -18,6 +20,10 @@ public class Manipulators {
 
     //claw
     public Servo claw;
+    public int startPos;
+    public int pos1;
+    public int pos2;
+    public int pos3;
 
     //Hardware Map
     public Manipulators(HardwareMap robot) {
@@ -58,4 +64,38 @@ public class Manipulators {
     public void clawClose(){
         claw.setPosition(1);
     }
+
+//Macro for the lift height.
+//NUMBERS ARE PLACEHOLDERS
+    public void liftToHeight(int[] positions, String height){
+        if (Objects.equals(height, "low")) {
+            lift1.setTargetPosition(positions[0]);
+            lift2.setTargetPosition(positions[0]);
+            lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else if (Objects.equals(height, "mid")) {
+            lift1.setTargetPosition(positions[1]);
+            lift2.setTargetPosition(positions[1]);
+            lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else if (Objects.equals(height, "high")) {
+            lift1.setTargetPosition(positions[2]);
+            lift2.setTargetPosition(positions[2]);
+            lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+    }
+
+    public int[] setStartPos() {
+        startPos = lift1.getCurrentPosition();
+        pos1 = startPos + 1000;
+        pos2 = startPos + 2000;
+        pos3 = startPos + 3000;
+
+        int[] poses = {pos1, pos2, pos3};
+
+        return poses;
+
+    }
 }
+
