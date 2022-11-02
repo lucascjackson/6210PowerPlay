@@ -27,9 +27,9 @@ public class Movement {
         BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         FL.setDirection(DcMotor.Direction.FORWARD);
-        FR.setDirection(DcMotor.Direction.FORWARD);
-        BL.setDirection(DcMotor.Direction.FORWARD);
-        BR.setDirection(DcMotor.Direction.FORWARD);
+        FR.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.REVERSE);
+        BR.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public double[] holonomicDrive(double leftX, double leftY, double rightX) {

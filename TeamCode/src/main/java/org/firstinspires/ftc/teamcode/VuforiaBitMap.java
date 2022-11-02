@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+/*package org.firstinspires.ftc.teamcode;
 
 import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
@@ -18,18 +18,18 @@ public class VuforiaBitMap {
     private LinearOpMode robot;
     private VuforiaLocalizer vuforia;
 
-    public VuforiaBitMap(LinearOpMode robot) {
-        this.robot = robot;
+    //public VuforiaBitMap(LinearOpMode robot) {
+        //this.robot = robot;
         //Create vuforia object
-        this.vuforia = null;
+        //this.vuforia = null;
 
         //Add initialization
-        int cameraMonitorViewId = robot.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", robot.hardwareMap.appContext.getPackageName());
+        //int cameraMonitorViewId = robot.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", robot.hardwareMap.appContext.getPackageName());
 
         //LogitechC310 = hardwareMap.get(WebcamName.class, "Logitech C310");
 
         //localizer for webcam
-        VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        //VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         params.vuforiaLicenseKey = "AQt2xVL/////AAABmXIVKUnTcEJbqvVBjp/Sw/9SqarohYyKotzRjT/Xl1/S8KDwsFHv/zYw6rXqXTjKrnjk92GfBA4hbZaQP17d1N6BiBuXO2W/hFNoMGxiF+fWlnvtDmUM1H/MF9faMOjZcPNjnQ7X8DVwdDDha3A3aqaoegefkKxb4A5EjP8Xcb0EPJ1JA4RwhUOutLbCDJNKUq6nCi+cvPqShvlYTvXoROcOGWSIrPxMEiOHemCyuny7tJHUyEg2FTd2upiQygKAeD+LN3P3cT02aK6AJbQ0DlQccxAtoo1+b//H6/eGro2s0fjxA2dH3AaoHB7qkb2K0Vl7ReFEwX7wmqJleamNUG+OZu7K3Zm68mPudzNuhAWQ";
         //paramWC.cameraName = LogitechC310;
         vuforia = ClassFactory.getInstance().createVuforia(params);
@@ -104,5 +104,6 @@ public class VuforiaBitMap {
     }
 
 }
+*/
 
 

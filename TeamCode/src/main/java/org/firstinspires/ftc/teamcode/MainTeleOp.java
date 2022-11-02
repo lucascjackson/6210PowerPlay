@@ -19,10 +19,10 @@ public class MainTeleOp extends OpMode {
     boolean open = true;
 
     public void init() {
-        manip = new Manipulators(hardwareMap);
+        //manip = new Manipulators(hardwareMap);
         move = new Movement(hardwareMap);
 
-        manip.clawOpen();
+        //manip.clawOpen();
 
         telemetry.addData("init", "completed");
         telemetry.update();
@@ -54,7 +54,10 @@ public class MainTeleOp extends OpMode {
        double rightX = 0;
 
         if (Math.abs(gamepad2.left_stick_y) > 0.1){
-            manip.powerLift(gamepad1.left_stick_y);
+          manip.powerLift(gamepad2.left_stick_y);
+        }
+        else {
+          manip.powerLift(0);
         }
 
         if (isPressed("rightBumper1", gamepad2.right_bumper)){
@@ -68,6 +71,7 @@ public class MainTeleOp extends OpMode {
             }
         }
 
+
         if (Math.abs(gamepad1.left_stick_y)  > 0.1 ||
             Math.abs(gamepad1.left_stick_x)  > 0.1 ||
             Math.abs(gamepad1.right_stick_x) > 0.1) {
@@ -79,10 +83,14 @@ public class MainTeleOp extends OpMode {
             motorPower = move.holonomicDrive(leftX, leftY, rightX);
 
         }
+        else {
+            motorPower = new double[]{0, 0, 0, 0};
+        }
 
         move.setPowers(motorPower);
 
         //Lift MACROS
+
         if (isPressed("2y", gamepad2.y)){
             manip.liftToHeight(manip.setStartPos(), "low");
         }
@@ -92,7 +100,6 @@ public class MainTeleOp extends OpMode {
         if (isPressed("2a", gamepad2.a)) {
             manip.liftToHeight(manip.setStartPos(), "high");
         }
-        //Write a story about rishi the software guy
 
     }
 
