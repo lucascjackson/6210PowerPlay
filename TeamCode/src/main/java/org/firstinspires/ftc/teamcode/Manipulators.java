@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -31,7 +32,7 @@ public class Manipulators {
         //lift mapping
         lift1 = robot.get(DcMotor.class, "lift1");
         lift2 = robot.get(DcMotor.class, "lift2");
-
+        lift2.setDirection(DcMotor.Direction.REVERSE);
         //claw mapping
         claw = robot.get(Servo.class, "claw");
 
@@ -41,6 +42,7 @@ public class Manipulators {
         lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void checkPosition() {
@@ -57,12 +59,10 @@ public class Manipulators {
         lift2.setPower(leftStickY);
     }
 
-    public void clawOpen(){
-        claw.setPosition(0);
-    }
+    public void clawOpen(){ claw.setPosition(0.03); }
 
     public void clawClose(){
-        claw.setPosition(1);
+        claw.setPosition(0.27);
     }
 
 //Macro for the lift height.

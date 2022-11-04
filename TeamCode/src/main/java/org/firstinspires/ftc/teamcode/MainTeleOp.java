@@ -19,7 +19,7 @@ public class MainTeleOp extends OpMode {
     boolean open = true;
 
     public void init() {
-        //manip = new Manipulators(hardwareMap);
+        manip = new Manipulators(hardwareMap);
         move = new Movement(hardwareMap);
 
         //manip.clawOpen();
@@ -60,12 +60,15 @@ public class MainTeleOp extends OpMode {
           manip.powerLift(0);
         }
 
+
         if (isPressed("rightBumper1", gamepad2.right_bumper)){
             if (open){
+                telemetry.addData("position", manip.claw.getPosition());
                 manip.clawClose();
                 open = false;
 
             } else {
+                telemetry.addData("claw", "open");
                 manip.clawOpen();
                 open = true;
             }
