@@ -41,6 +41,12 @@ public class Manipulators {
         lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void checkPosition() {
@@ -57,12 +63,16 @@ public class Manipulators {
         lift2.setPower(leftStickY);
     }
 
+    public String getpowers() {
+        return "1:" + lift1.getPower() + " 2: " + lift2.getPower();
+    }
+
     public void clawOpen(){
-        claw.setPosition(0);
+        claw.setPosition(0.03);
     }
 
     public void clawClose(){
-        claw.setPosition(1);
+        claw.setPosition(0.27);
     }
 
 //Macro for the lift height.

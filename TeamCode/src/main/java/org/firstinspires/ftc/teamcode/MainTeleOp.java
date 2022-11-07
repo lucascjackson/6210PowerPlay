@@ -55,6 +55,8 @@ public class MainTeleOp extends OpMode {
 
         if (Math.abs(gamepad2.left_stick_y) > 0.1){
             manip.powerLift(gamepad1.left_stick_y);
+            telemetry.addData("", manip.getpowers());
+
         }
 
         if (isPressed("rightBumper1", gamepad2.right_bumper)){
@@ -78,6 +80,11 @@ public class MainTeleOp extends OpMode {
 
             motorPower = move.holonomicDrive(leftX, leftY, rightX);
 
+        }
+
+        else {
+
+            motorPower = move.holonomicDrive(0, 0, 0);
         }
 
         move.setPowers(motorPower);
