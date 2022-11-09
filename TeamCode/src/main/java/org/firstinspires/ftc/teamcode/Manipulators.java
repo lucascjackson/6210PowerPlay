@@ -2,10 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import java.util.Objects;
 
 @Config
 public class Manipulators {
@@ -17,13 +16,16 @@ public class Manipulators {
     //lift
     public DcMotor lift1;
     public DcMotor lift2;
-
-    //claw
-    public Servo claw;
-    public int startPos;
+    public DigitalChannel liftSensor;
+    public int defaultPos;
     public int pos1;
     public int pos2;
     public int pos3;
+
+    //claw
+    public Servo claw;
+    public boolean open;
+
 
     //Hardware Map
     public Manipulators(HardwareMap robot) {
@@ -31,80 +33,91 @@ public class Manipulators {
         //lift mapping
         lift1 = robot.get(DcMotor.class, "lift1");
         lift2 = robot.get(DcMotor.class, "lift2");
+        liftSensor = robot.get(DigitalChannel.class, "liftSensor");
 
         //claw mapping
         claw = robot.get(Servo.class, "claw");
 
         //lift Encoders
-        lift1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        lift2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        lift2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void checkPosition() {
-        if (lift1.getCurrentPosition() < lowest) {
-            lowest = lift1.getCurrentPosition();
-        }
-        if (lift1.getCurrentPosition() > highest) {
-            highest = lift1.getCurrentPosition();
-        }
+    //LIFT METHODS
+
+    public void powerLift(double power){
+        lift1.setPower(power);
+        lift2.setPower(power);
     }
 
-    public void powerLift(double leftStickY){
-        lift1.setPower(leftStickY);
-        lift2.setPower(leftStickY);
+    public int getLiftPosition() {
+        return lift1.getCurrentPosition();
     }
 
-    public String getpowers() {
-        return "1:" + lift1.getPower() + " 2: " + lift2.getPower();
+    public boolean liftIsDefault () {
+        return !liftSensor.getState();
     }
+
+    //CLAWS METHODS
 
     public void clawOpen(){
-        claw.setPosition(0.03);
+        claw.setPosition(-0.12);
+        open = true;
     }
 
     public void clawClose(){
-        claw.setPosition(0.27);
+        claw.setPosition(0.4);
+        open = false;
+    }
+
+    public boolean clawIsOpen() {
+       return open;
     }
 
 //Macro for the lift height.
 //NUMBERS ARE PLACEHOLDERS
     public void liftToHeight(int[] positions, String height){
-        if (Objects.equals(height, "low")) {
-            lift1.setTargetPosition(positions[0]);
-            lift2.setTargetPosition(positions[0]);
-            lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        } else if (Objects.equals(height, "mid")) {
-            lift1.setTargetPosition(positions[1]);
-            lift2.setTargetPosition(positions[1]);
-            lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        } else if (Objects.equals(height, "high")) {
-            lift1.setTargetPosition(positions[2]);
-            lift2.setTargetPosition(positions[2]);
-            lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        switch(height) {
+            case "default":
+                lift1.setTargetPosition(positions[0]);
+                lift2.setTargetPosition(positions[0]);
+                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                break;
+            case "low":
+                lift1.setTargetPosition(positions[1]);
+                lift2.setTargetPosition(positions[1]);
+                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                break;
+            case "mid":
+                lift1.setTargetPosition(positions[2]);
+                lift2.setTargetPosition(positions[2]);
+                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                break;
+            case "high":
+                lift1.setTargetPosition(positions[3]);
+                lift2.setTargetPosition(positions[3]);
+                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                break;
         }
     }
 
-    public int[] setStartPos() {
-        startPos = lift1.getCurrentPosition();
-        pos1 = startPos + 1000;
-        pos2 = startPos + 2000;
-        pos3 = startPos + 3000;
+    public int[] setPositions() {
+        defaultPos = lift1.getCurrentPosition();
+        pos1 = defaultPos - 1000;
+        pos2 = defaultPos - 2000;
+        pos3 = defaultPos - 4500;
 
-        int[] poses = {pos1, pos2, pos3};
+        int[] positions = {defaultPos, pos1, pos2, pos3};
 
-        return poses;
+        return positions;
 
     }
 }

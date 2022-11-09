@@ -8,7 +8,11 @@ import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
 
 
 import java.util.ArrayList;
@@ -28,6 +32,10 @@ public class VuforiaBitMap {
     private LinearOpMode robot;
     private VuforiaLocalizer vuforia;
 
+    private int redValue;
+    private int blueValue;
+    private int greenValue;
+
     public VuforiaBitMap(LinearOpMode robot) {
         this.robot = robot;
         //Create vuforia object
@@ -35,9 +43,9 @@ public class VuforiaBitMap {
 
         //Add initialization
         int cameraMonitorViewId = robot.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", robot.hardwareMap.appContext.getPackageName());
+        //OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(logitech_webcam, cameraMonitorViewId);
 
         //LogitechC310 = hardwareMap.get(WebcamName.class, "Logitech C310");
-
         //localizer for webcam
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         params.vuforiaLicenseKey = "AcwUcZv/////AAABmcZmJOhJO0lDmuWB65t6j8YfeflGlsIu2d3qoec9xPdFe3HCmmfVbCJhV5xlLc6hwP47x69a0BxYDrvsJfv7L5Cjgf3daHpsyuahKkROo1ptoXfmMuJpLd1QFj8/DF0FIcmM9gxWpevecLMBnPVorHrE+JyVUiafGWGENxnEAb9HW+IxZ9eXIFjrZTbcUv7jTnD358PlITDeMouxj/pI7tegVuksVUlNhYBg420Oo1eGvqWB9b8Ikwy5VAahwIn2IDNj74q5Lo64MgLLPTDFDJN+BKwo5XERrU8ONXrGiPLSWBSjvOvM/joQVGqn7Z5bw6ApGT7r2b2VELqI45AZIXGaux8QAmk6JOf7ttdmyL9V";
@@ -79,39 +87,32 @@ public class VuforiaBitMap {
 
     }
 
-    //returns 1, 2, or 3 for the three possible capstone locations
-    // 1 : left || 2 : mid || 3 : right
-    // Resolution : 1280 X 720
-    // RED CLOSE TO CAROUSEL COORDINATES : RIGHT (3) - 698, 600 || MID (2) - 232, 600
-    // BLUE CLOSE TO CAROUSEL COORDINATES : LEFT (1) - || MID (2) -
 
     public int LeftPostionVision() throws InterruptedException{
 
         Bitmap bm = this.getBitmap();
 
-        int blueValue = blue(bm.getPixel(midW, midH));
-        int greenValue = green(bm.getPixel(midW, midH));
-        int redValue = red(bm.getPixel(midW, midH));
+        blueValue = blue(bm.getPixel(midW-1, midH-1));
+        greenValue = green(bm.getPixel(midW, midH));
+        redValue = red(bm.getPixel(midW+1, midH+1));
 
 
-        if (blueValue < 100 && greenValue < 100 && redValue < 100) {
+        if (blueValue < 120 && greenValue > 140 && redValue < 120 ) {
             return 1;
         }
-        if (blueValue < 120 && greenValue > 140 && redValue < 120 ) {
+        if (blueValue > 200 && greenValue > 200 && redValue < 100) {
             return 2;
         }
-        if (blueValue > 200 && greenValue > 200 && redValue < 100) {
+        if (blueValue < 100 && greenValue < 100 && redValue < 100) {
             return 3;
         }
 
         return 3;
     }
 
-    public void SetIndicatorPixel() throws InterruptedException {
+    public String colorFeedBack() {
 
-        Bitmap bm = this.getBitmap();
-
-        bm.setPixel(midW, midH, Color.rgb(255, 0, 255));
+        return "red: " + redValue + " green: " + greenValue + " blue: " + blueValue;
 
     }
 
