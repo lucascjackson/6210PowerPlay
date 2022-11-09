@@ -1,42 +1,64 @@
-/*package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.vuforia.CameraDevice;
+import com.vuforia.Image;
+import com.vuforia.PIXEL_FORMAT;
+import com.vuforia.Vuforia;
+
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
 import static android.graphics.Color.red;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.graphics.Bitmap;
-
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.vuforia.Image;
-import com.vuforia.PIXEL_FORMAT;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import android.graphics.Color;
 
 public class VuforiaBitMap {
 
     private LinearOpMode robot;
     private VuforiaLocalizer vuforia;
 
-    //public VuforiaBitMap(LinearOpMode robot) {
-        //this.robot = robot;
+    private int redValue;
+    private int blueValue;
+    private int greenValue;
+
+    public VuforiaBitMap(LinearOpMode robot) {
+        this.robot = robot;
         //Create vuforia object
-        //this.vuforia = null;
+        this.vuforia = null;
 
         //Add initialization
-        //int cameraMonitorViewId = robot.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", robot.hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = robot.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", robot.hardwareMap.appContext.getPackageName());
+        //OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(logitech_webcam, cameraMonitorViewId);
 
         //LogitechC310 = hardwareMap.get(WebcamName.class, "Logitech C310");
-
         //localizer for webcam
-        //VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        params.vuforiaLicenseKey = "AQt2xVL/////AAABmXIVKUnTcEJbqvVBjp/Sw/9SqarohYyKotzRjT/Xl1/S8KDwsFHv/zYw6rXqXTjKrnjk92GfBA4hbZaQP17d1N6BiBuXO2W/hFNoMGxiF+fWlnvtDmUM1H/MF9faMOjZcPNjnQ7X8DVwdDDha3A3aqaoegefkKxb4A5EjP8Xcb0EPJ1JA4RwhUOutLbCDJNKUq6nCi+cvPqShvlYTvXoROcOGWSIrPxMEiOHemCyuny7tJHUyEg2FTd2upiQygKAeD+LN3P3cT02aK6AJbQ0DlQccxAtoo1+b//H6/eGro2s0fjxA2dH3AaoHB7qkb2K0Vl7ReFEwX7wmqJleamNUG+OZu7K3Zm68mPudzNuhAWQ";
+        VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        params.vuforiaLicenseKey = "AcwUcZv/////AAABmcZmJOhJO0lDmuWB65t6j8YfeflGlsIu2d3qoec9xPdFe3HCmmfVbCJhV5xlLc6hwP47x69a0BxYDrvsJfv7L5Cjgf3daHpsyuahKkROo1ptoXfmMuJpLd1QFj8/DF0FIcmM9gxWpevecLMBnPVorHrE+JyVUiafGWGENxnEAb9HW+IxZ9eXIFjrZTbcUv7jTnD358PlITDeMouxj/pI7tegVuksVUlNhYBg420Oo1eGvqWB9b8Ikwy5VAahwIn2IDNj74q5Lo64MgLLPTDFDJN+BKwo5XERrU8ONXrGiPLSWBSjvOvM/joQVGqn7Z5bw6ApGT7r2b2VELqI45AZIXGaux8QAmk6JOf7ttdmyL9V";
         //paramWC.cameraName = LogitechC310;
         vuforia = ClassFactory.getInstance().createVuforia(params);
 
         com.vuforia.Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
         vuforia.setFrameQueueCapacity(1); //tells VuforiaLocalizer to only store one frame at a time
     }
+
+    int midH = 0;
+
+    int midW = 0;
 
     public Bitmap getBitmap() throws InterruptedException {
         Bitmap bm = null;
@@ -47,11 +69,15 @@ public class VuforiaBitMap {
 
         // Iterate through all the images
         long num = frame.getNumImages();
-        for (int i = 0; i < num; i++) {
-            if (frame.getImage(i).getFormat() == PIXEL_FORMAT.RGB565) {
+        for(int i = 0; i < num; i++){
+            if(frame.getImage(i).getFormat() == PIXEL_FORMAT.RGB565){
                 rgb = frame.getImage(i);
             }
         }
+
+        midH = rgb.getHeight() / 2;
+
+        midW = rgb.getWidth() / 2;
 
         // Create bitmap
         bm = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565);
@@ -61,49 +87,33 @@ public class VuforiaBitMap {
 
     }
 
-    // IDENTIFIES AND CHECKS COLOR
-    public int right() throws InterruptedException {
+
+    public int LeftPostionVision() throws InterruptedException{
 
         Bitmap bm = this.getBitmap();
 
-        //checks for the RED value of three selected pixels on the camera
-        int p3Red = red(bm.getPixel(0, 0));
-        int p2Red = red(bm.getPixel(0, 0));
-        int p1Red = red(bm.getPixel(0, 0));
-        //checks for the GREEN value of three selected pixels on the camera
-        int p3Green = green(bm.getPixel(0, 0));
-        int p2Green = green(bm.getPixel(0, 0));
-        int p1Green = green(bm.getPixel(0, 0));
+        blueValue = blue(bm.getPixel(midW-1, midH-1));
+        greenValue = green(bm.getPixel(midW, midH));
+        redValue = red(bm.getPixel(midW+1, midH+1));
 
 
-        //threshold values for capstone color
-        if (p3Red < 0 && p3Green < 0) return 3;
-        if (p2Red < 1 && p2Green < 1) return 2;
-        if (p1Red < 2 && p1Green < 2) return 1;
-        else return 1;
+        if (blueValue < 120 && greenValue > 140 && redValue < 120 ) {
+            return 1;
+        }
+        if (blueValue > 200 && greenValue > 200 && redValue < 100) {
+            return 2;
+        }
+        if (blueValue < 100 && greenValue < 100 && redValue < 100) {
+            return 3;
+        }
+
+        return 3;
     }
-        // IDENTIFIES AND CHECKS COLOR
-    public int left() throws InterruptedException {
 
-        Bitmap bm = this.getBitmap();
-        //checks for the RED value of three selected pixels on the camera
-        int p3Red = red(bm.getPixel(0, 0));
-        int p2Red = red(bm.getPixel(0, 0));
-        int p1Red = red(bm.getPixel(0, 0));
-        //checks for the GREEN value of three selected pixels on the camera
-        int p3Green = green(bm.getPixel(0, 0));
-        int p2Green = green(bm.getPixel(0, 0));
-        int p1Green = green(bm.getPixel(0, 0));
+    public String colorFeedBack() {
 
+        return "red: " + redValue + " green: " + greenValue + " blue: " + blueValue;
 
-        //threshold values for capstone color, returning integer based on the colour value detected
-        if (p3Red < 0 && p3Green < 0) return 3;
-        if (p2Red < 1 && p2Green < 1) return 2;
-        if (p1Red < 2 && p1Green < 2) return 1;
-        else return 1;
     }
 
 }
-*/
-
-

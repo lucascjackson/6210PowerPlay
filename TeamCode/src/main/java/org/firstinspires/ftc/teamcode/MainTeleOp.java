@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.HashMap;
@@ -17,12 +15,20 @@ public class MainTeleOp extends OpMode {
     public HashMap<String, Boolean> buttons = new HashMap<String, Boolean>();
     double[] motorPower = {0, 0, 0, 0};
     boolean open = true;
+    private int halfspeedDivider;
+
+    String stringPos = "default";
+
+    int[] positions;
 
     public void init() {
         manip = new Manipulators(hardwareMap);
         move = new Movement(hardwareMap);
 
-        //manip.clawOpen();
+        manip.clawOpen();
+
+        positions = manip.setPositions();
+        halfspeedDivider = 1;
 
         telemetry.addData("init", "completed");
         telemetry.update();
@@ -53,25 +59,41 @@ public class MainTeleOp extends OpMode {
        double leftX = 0;
        double rightX = 0;
 
-        if (Math.abs(gamepad2.left_stick_y) > 0.1){
-          manip.powerLift(gamepad2.left_stick_y);
+
+        if (!manip.liftIsDefault()) {
+            positions = manip.setPositions();
         }
-        else {
-          manip.powerLift(0);
+
+        if (manip.clawIsOpen() && gamepad2.right_stick_y < -0.1)
+        {
+            gamepad2.rumble(0.5, 0.5, 100);
+        }
+
+        if (gamepad2.right_stick_y < -0.1 && !manip.clawIsOpen()) {
+            manip.powerLift(gamepad2.right_stick_y);
+        }
+        else if (gamepad2.right_stick_y > 0.1 && !manip.liftIsDefault()) {
+            manip.powerLift(gamepad2.right_stick_y);
+        } else {
+            manip.powerLift(0);
         }
 
 
-        if (isPressed("rightBumper1", gamepad2.right_bumper)){
+        if (isPressed("rightBumper2", gamepad2.right_bumper)){
             if (open){
-                telemetry.addData("position", manip.claw.getPosition());
                 manip.clawClose();
                 open = false;
 
             } else {
-                telemetry.addData("claw", "open");
                 manip.clawOpen();
                 open = true;
             }
+        }
+
+        if (isPressed("rightBumper1", gamepad1.right_bumper)) {
+            halfspeedDivider = 2;
+        } else {
+            halfspeedDivider= 1;
         }
 
 
@@ -81,28 +103,55 @@ public class MainTeleOp extends OpMode {
 
             leftY = gamepad1.left_stick_y;
             leftX = gamepad1.left_stick_x;
-            rightX = gamepad1.right_stick_x;
+            rightX = (-gamepad1.right_stick_x);
 
-            motorPower = move.holonomicDrive(leftX, leftY, rightX);
+            motorPower = move.holonomicDrive(leftX/halfspeedDivider, leftY/halfspeedDivider, rightX/halfspeedDivider);
 
         }
+
         else {
-            motorPower = new double[]{0, 0, 0, 0};
+            motorPower = move.holonomicDrive(0, 0, 0);
         }
 
         move.setPowers(motorPower);
 
         //Lift MACROS
 
-        if (isPressed("2y", gamepad2.y)){
-            manip.liftToHeight(manip.setStartPos(), "low");
+/*
+         if (isPressed("2y", gamepad2.y) && stringPos.equals("default") || !stringPos.equals("high")){
+
+            manip.liftToHeight(positions, "high");
+            stringPos = "high";
         }
-        if (isPressed("2b", gamepad2.b)){
-            manip.liftToHeight(manip.setStartPos(), "mid");
+        else if (isPressed("2b", gamepad2.b) && stringPos.equals("default") || !stringPos.equals("mid")){
+
+            manip.liftToHeight(positions, "mid");
+            stringPos = "mid";
         }
-        if (isPressed("2a", gamepad2.a)) {
-            manip.liftToHeight(manip.setStartPos(), "high");
+        else if (isPressed("2a", gamepad2.a) && stringPos.equals("default") || !stringPos.equals("low")){
+
+            manip.liftToHeight(positions, "low");
+            stringPos = "low";
         }
+        else if (isPressed("2a", gamepad2.a) ||
+                 isPressed("2b", gamepad2.b) ||
+                 isPressed("2x", gamepad2.x) ||
+                 isPressed("2y", gamepad2.y)) {
+
+            manip.liftToHeight(positions, "default");
+            stringPos = "default";
+        }
+
+ */
+
+        telemetry.addData("Lift1 Encoder Value: ", manip.getLiftPosition());
+        telemetry.addData("Lift Position: ",stringPos );
+        telemetry.addData("StickY: ", gamepad2.right_stick_y);
+        telemetry.addData("isInDefault: ", manip.liftIsDefault());
+        telemetry.update();
+
+
+        //Write a story about rishi the software guy
 
     }
 
