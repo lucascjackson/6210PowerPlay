@@ -90,7 +90,7 @@ public class MainTeleOp extends OpMode {
             }
         }
 
-        if (isPressed("rightBumper1", gamepad1.right_bumper)) {
+        if (gamepad1.right_bumper) {
             halfspeedDivider = 2;
         } else {
             halfspeedDivider= 1;
@@ -101,9 +101,9 @@ public class MainTeleOp extends OpMode {
             Math.abs(gamepad1.left_stick_x)  > 0.1 ||
             Math.abs(gamepad1.right_stick_x) > 0.1) {
 
-            leftY = gamepad1.left_stick_y;
+            leftY = gamepad1.left_stick_y/1.5;
             leftX = gamepad1.left_stick_x;
-            rightX = (-gamepad1.right_stick_x);
+            rightX = (-gamepad1.right_stick_x)/2;
 
             motorPower = move.holonomicDrive(leftX/halfspeedDivider, leftY/halfspeedDivider, rightX/halfspeedDivider);
 

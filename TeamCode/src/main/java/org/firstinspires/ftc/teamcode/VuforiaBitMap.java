@@ -35,6 +35,10 @@ public class VuforiaBitMap {
     private int redValue;
     private int blueValue;
     private int greenValue;
+    double expectedRatio1 = 0.3707865169;
+    double expectedRatio2 = 0.5892857143;
+   // double ratio1;
+    double ratio;
 
     public VuforiaBitMap(LinearOpMode robot) {
         this.robot = robot;
@@ -43,9 +47,7 @@ public class VuforiaBitMap {
 
         //Add initialization
         int cameraMonitorViewId = robot.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", robot.hardwareMap.appContext.getPackageName());
-        //OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(logitech_webcam, cameraMonitorViewId);
 
-        //LogitechC310 = hardwareMap.get(WebcamName.class, "Logitech C310");
         //localizer for webcam
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         params.vuforiaLicenseKey = "AcwUcZv/////AAABmcZmJOhJO0lDmuWB65t6j8YfeflGlsIu2d3qoec9xPdFe3HCmmfVbCJhV5xlLc6hwP47x69a0BxYDrvsJfv7L5Cjgf3daHpsyuahKkROo1ptoXfmMuJpLd1QFj8/DF0FIcmM9gxWpevecLMBnPVorHrE+JyVUiafGWGENxnEAb9HW+IxZ9eXIFjrZTbcUv7jTnD358PlITDeMouxj/pI7tegVuksVUlNhYBg420Oo1eGvqWB9b8Ikwy5VAahwIn2IDNj74q5Lo64MgLLPTDFDJN+BKwo5XERrU8ONXrGiPLSWBSjvOvM/joQVGqn7Z5bw6ApGT7r2b2VELqI45AZIXGaux8QAmk6JOf7ttdmyL9V";
@@ -92,28 +94,50 @@ public class VuforiaBitMap {
 
         Bitmap bm = this.getBitmap();
 
-        blueValue = blue(bm.getPixel(midW-1, midH-1));
+        blueValue = blue(bm.getPixel(midW, midH));
         greenValue = green(bm.getPixel(midW, midH));
-        redValue = red(bm.getPixel(midW+1, midH+1));
+        redValue = red(bm.getPixel(midW, midH));
+        boolean posOne = false;
+        boolean posTwo = false;
+
+        ratio = (double)blueValue /(greenValue + blueValue + redValue);
 
 
-        if (blueValue < 120 && greenValue > 140 && redValue < 120 ) {
+        double percentError1 = Math.abs((ratio - expectedRatio1)/ expectedRatio1);
+        double percentError2 = Math.abs((ratio - expectedRatio2)/ expectedRatio2);
+
+        if (percentError1 < .1) {
+            posOne = true;
+        }
+        if (percentError2 < .1) {
+            posTwo = true;
+        }
+
+        if (posOne && posTwo) {
+            if (percentError1 < percentError2) {
+                return 1;
+            } else return 2;
+        }
+
+        if (posOne) {
             return 1;
         }
-        if (blueValue > 200 && greenValue > 200 && redValue < 100) {
+
+        if (posTwo) {
             return 2;
         }
-        if (blueValue < 100 && greenValue < 100 && redValue < 100) {
-            return 3;
-        }
 
-        return 3;
+        return  3;
     }
 
     public String colorFeedBack() {
 
         return "red: " + redValue + " green: " + greenValue + " blue: " + blueValue;
 
+    }
+
+    public String ratioFeedBack() {
+        return "ratio1: " + ratio;
     }
 
 }

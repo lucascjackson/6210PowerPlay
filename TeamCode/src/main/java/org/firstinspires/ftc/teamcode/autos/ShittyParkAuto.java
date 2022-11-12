@@ -20,6 +20,8 @@ public class ShittyParkAuto extends LinearOpMode {
         int pos = vuforia.LeftPostionVision();
 
         telemetry.addData("",vuforia.colorFeedBack());
+        telemetry.addData("pos: ", pos);
+        telemetry.addData("", vuforia.ratioFeedBack());
         telemetry.update();
 
         waitForStart();

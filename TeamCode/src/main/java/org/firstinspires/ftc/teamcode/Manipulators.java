@@ -65,12 +65,12 @@ public class Manipulators {
     //CLAWS METHODS
 
     public void clawOpen(){
-        claw.setPosition(-0.12);
+        claw.setPosition(.5);
         open = true;
     }
 
     public void clawClose(){
-        claw.setPosition(0.4);
+        claw.setPosition(1.2);
         open = false;
     }
 
@@ -78,7 +78,7 @@ public class Manipulators {
        return open;
     }
 
-//Macro for the lift height.
+//Macro for the lift height
 //NUMBERS ARE PLACEHOLDERS
     public void liftToHeight(int[] positions, String height){
         switch(height) {
