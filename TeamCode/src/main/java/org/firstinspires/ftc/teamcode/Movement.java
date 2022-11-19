@@ -53,8 +53,9 @@ public class Movement {
     public void AML1Park(int colorCase) {
 
         double[] forward = {0.5, 0.5, 0.5, 0.5};
+        double[] backward = {-0.5, -0.5, -0.5, -0.5};
         double[] stop = {0,0,0,0};
-        double[] strafe = new double[4];
+        double[] turn = {0.5, -0.5, 0.5, -0.5};
 
         ElapsedTime time = new ElapsedTime();
 
@@ -63,41 +64,40 @@ public class Movement {
 
         setPowers(forward);
 
-        while (time.seconds() < 0.4);
+        while (time.seconds() < 1.3);
 
         setPowers(stop);
-
-
-        switch(colorCase) {
-
-            case 1:
-                strafe[0] = 0.5;
-                strafe[1] = 0.5;
-                strafe[2] = -0.5;
-                strafe[3] = -0.5;
-                break;
-
-            case 2:
-                strafe[0] = 0;
-                strafe[1] = 0;
-                strafe[2] = 0;
-                strafe[3] = 0;
-                break;
-
-            case 3:
-                strafe[0] = -0.5;
-                strafe[1] = -0.5;
-                strafe[2] = 0.5;
-                strafe[3] = 0.5;
-                break;
-        }
 
         time.reset();
         time.startTime();
 
-        setPowers(strafe);
+        setPowers(turn);
 
-        while (time.seconds() < 0.2);
+        while (time.seconds() < 1);
+
+        setPowers(stop);
+
+
+
+        time.reset();
+        time.startTime();
+
+        switch(colorCase) {
+
+            case 1:
+                setPowers(backward);
+                break;
+            case 2:
+                setPowers(stop);
+                break;
+
+            case 3:
+                setPowers(forward);
+                break;
+        }
+
+
+        while (time.seconds() < 1.2);
 
         setPowers(stop);
 
