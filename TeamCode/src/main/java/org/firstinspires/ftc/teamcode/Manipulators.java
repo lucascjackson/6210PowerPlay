@@ -65,12 +65,12 @@ public class Manipulators {
     //CLAWS METHODS
 
     public void clawOpen(){
-        claw.setPosition(.5);
+        claw.setPosition(.6);
         open = true;
     }
 
     public void clawClose(){
-        claw.setPosition(1.2);
+        claw.setPosition(1.1);
         open = false;
     }
 

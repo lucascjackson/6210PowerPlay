@@ -74,7 +74,8 @@ public class MainTeleOp extends OpMode {
         }
         else if (gamepad2.right_stick_y > 0.1 && !manip.liftIsDefault()) {
             manip.powerLift(gamepad2.right_stick_y);
-        } else {
+        }
+        else {
             manip.powerLift(0);
         }
 

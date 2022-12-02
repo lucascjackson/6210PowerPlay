@@ -17,14 +17,15 @@ public class TimedParkAuto extends LinearOpMode {
         Movement move = new Movement(hardwareMap);
         VuforiaBitMap vuforia = new VuforiaBitMap(this);
 
-        waitForStart();
-
         int pos = vuforia.LeftPostionVision();
+
 
         telemetry.addData("",vuforia.colorFeedBack());
         telemetry.addData("pos: ", pos);
         telemetry.addData("", vuforia.ratioFeedBack());
         telemetry.update();
+ 
+        waitForStart();
 
         move.AML1Park(pos);
     }

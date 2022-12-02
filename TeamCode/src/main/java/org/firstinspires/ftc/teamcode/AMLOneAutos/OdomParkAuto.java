@@ -17,20 +17,19 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Autonomous(name = "OdomParkAuto", group = "Autonomous")
 public class OdomParkAuto extends LinearOpMode {
 
-    int pos2X = 36;
+    double pos2X = -25.53;
     int pos2Y = 0;
-    double pos2Angle = Math.toRadians(270);
+    double pos2Angle = Math.toRadians(0);
 
-    int pos1X = 36;
-    int pos1Y = -24;
-    double pos1Angle = Math.toRadians(270);
+    double pos1X = -25.71;
+    double pos1Y = -22.43;
+    double pos1Angle = Math.toRadians(0);
 
-    int pos3X = 36;
-    int pos3Y = 24;
-    double pos3Angle = Math.toRadians(270);
+    double pos3X = -25.88;
+    double pos3Y = 24.51;
+    double pos3Angle = Math.toRadians(0);
 
-    Pose2d startPose = new Pose2d(9, 0, Math.toRadians(180));
-
+    Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -38,7 +37,7 @@ public class OdomParkAuto extends LinearOpMode {
         // TODO create manipulotors
         VuforiaBitMap vuforia = new VuforiaBitMap(this);
         int pos = vuforia.LeftPostionVision();
-
+        telemetry.addData("Position",pos);
 
         drive.setPoseEstimate(startPose);
 

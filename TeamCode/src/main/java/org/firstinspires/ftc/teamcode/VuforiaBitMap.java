@@ -8,8 +8,8 @@ import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
+//import org.openftc.easyopencv.OpenCvCamera;
+//import org.openftc.easyopencv.OpenCvCameraFactory;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -35,8 +35,9 @@ public class VuforiaBitMap {
     private int redValue;
     private int blueValue;
     private int greenValue;
-    double expectedRatio1 = 0.7214285714;
-    double expectedRatio2 = 0.736;
+    double expectedRatio1 = 0.2244897;
+    double expectedRatio2 = 0.0306513;
+
    // double ratio1;
     double ratio;
 
@@ -100,7 +101,7 @@ public class VuforiaBitMap {
         boolean posOne = false;
         boolean posTwo = false;
 
-        ratio = (double)greenValue /(blueValue + redValue);
+        ratio = (double) (redValue)/(blueValue + redValue + greenValue);
 
 
         double percentError1 = Math.abs((ratio - expectedRatio1)/ expectedRatio1);
@@ -109,7 +110,7 @@ public class VuforiaBitMap {
         if (percentError1 < .1) {
             posOne = true;
         }
-        if (percentError2 < .1) {
+        if (percentError2 < 2) {
             posTwo = true;
         }
 
