@@ -27,9 +27,6 @@ public class RightScoreAuto extends LinearOpMode {
 
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
     Pose2d posEstimate;
-
-    Pose2d posa = new Pose2d(49, 0, Math.toRadians(0));
-
     public static double pos2X = 28;
     public static int pos2Y = 0;
     public static double pos2Angle = Math.toRadians(0);
@@ -42,9 +39,13 @@ public class RightScoreAuto extends LinearOpMode {
     public static  double pos3Y = 24.51 * 2;
     public static double pos3Angle = Math.toRadians(0);
 
-    public static double straightX = 49;
-    public static double straightY = 0;
+    public static double pushConeX = 60;
+    public static double pushConeY = 0;
+    public static double pushConeAngle = Math.toRadians(0);
 
+    public static double alignStackX = 0.1;
+    public static double alignStackY = 0.1;
+    public static double getAlignStackAngle=Math.toRadians(270);
     public static double startWait = 0;
 
     State currentState = State.IDLE;
@@ -63,25 +64,25 @@ public class RightScoreAuto extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        Trajectory straight_forward = drive.trajectoryBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(straightX, straightY, Math.toRadians(0)))
+        Trajectory pushCone = drive.trajectoryBuilder(startPose)
+                .lineToLinearHeading(new Pose2d(pushConeX, pushConeY, pushConeAngle))
                 .build();
 
-        Trajectory align_stack = drive.trajectoryBuilder(posa)
-                .lineToLinearHeading(new Pose2d(straightX, straightY, Math.toRadians(90)))
+        Trajectory align_stack = drive.trajectoryBuilder(startPose)
+                .lineToLinearHeading(new Pose2d(alignStackX, alignStackY, getAlignStackAngle))
                 .build();
 
         Trajectory pos2 = drive.trajectoryBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(pos2X, pos2Y, pos2Angle))
                 .build();
 
-        Trajectory pos1 = drive.trajectoryBuilder(pos2.end())
+        /*Trajectory pos1 = drive.trajectoryBuilder(pos2.end())
                 .lineToLinearHeading(new Pose2d(pos1X, pos1Y, pos1Angle))
                 .build();
 
         Trajectory pos3 = drive.trajectoryBuilder(pos2.end())
                 .lineToLinearHeading(new Pose2d(pos3X, pos3Y, pos1Angle))
-                .build();
+                .build();*/
         currentState = State.WAIT;
 
         waitTimer.reset();
@@ -102,11 +103,15 @@ public class RightScoreAuto extends LinearOpMode {
                     break;
 
                 case STRAIGHT:
-                    drive.followTrajectory(straight_forward);
+                    telemetry.addLine("Going Straight");
+                    telemetry.update();
+                    drive.followTrajectory(pushCone);
                     currentState = State.ALIGN;
                     break;
 
                 case ALIGN:
+                    telemetry.addLine(String.valueOf(posEstimate.getX()));
+                    telemetry.update();
                     drive.followTrajectory(align_stack);
                     currentState = State.IDLE;
                     break;
