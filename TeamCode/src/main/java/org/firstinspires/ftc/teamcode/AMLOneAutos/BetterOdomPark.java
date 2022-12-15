@@ -30,7 +30,7 @@ public class BetterOdomPark extends LinearOpMode {
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
     Pose2d posEstimate;
 
-    public static double pos2X = 28;
+    public static double pos2X = 26;
     public static int pos2Y = 0;
     public static double pos2Angle = Math.toRadians(0);
 
@@ -40,7 +40,7 @@ public class BetterOdomPark extends LinearOpMode {
 
     public static double pos3X = 28;
     public static  double pos3Y = 24.51 * 2;
-    public static double pos3Angle = Math.toRadians(0);
+    public static double pos3Angle = Math.toRadians(-10);
 
     public static double startWait = 0;
 
@@ -70,7 +70,7 @@ public class BetterOdomPark extends LinearOpMode {
                 .build();
 
         Trajectory pos3 = drive.trajectoryBuilder(pos2.end())
-                .lineToLinearHeading(new Pose2d(pos3X, pos3Y, pos1Angle))
+                .lineToLinearHeading(new Pose2d(pos3X, pos3Y, pos3Angle))
                 .build();
 
         currentState = State.WAIT;

@@ -19,6 +19,7 @@ public class RightScoreAuto extends LinearOpMode {
         WAIT,
         STRAIGHT,
         ALIGN,
+        GRAB_CONE,
         POS_DOS,
         POS_UNO,
         POS_TRES,
@@ -39,14 +40,18 @@ public class RightScoreAuto extends LinearOpMode {
     public static  double pos3Y = 24.51 * 2;
     public static double pos3Angle = Math.toRadians(0);
 
-    public static double pushConeX = 60;
+    public static double pushConeX = 49;
     public static double pushConeY = 0;
     public static double pushConeAngle = Math.toRadians(0);
 
     public static double alignStackX = 0.1;
     public static double alignStackY = 0.1;
-    public static double getAlignStackAngle=Math.toRadians(270);
+    public static double getAlignStackAngle=Math.toRadians(275);
     public static double startWait = 0;
+
+    public static double grab_coneX = -16;
+    public static double grab_coneY = 0;
+    public static double grab_coneAngle=Math.toRadians(0);
 
     State currentState = State.IDLE;
 
@@ -72,10 +77,23 @@ public class RightScoreAuto extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(alignStackX, alignStackY, getAlignStackAngle))
                 .build();
 
+        Trajectory lose_signal1 = drive.trajectoryBuilder(startPose)
+                .lineToLinearHeading(new Pose2d(25, 0, Math.toRadians(0)))
+                .build();
+
+        Trajectory lose_signal2 = drive.trajectoryBuilder(startPose)
+                .lineToLinearHeading(new Pose2d(-25, 0, Math.toRadians(352.55)))
+                .build();
+
+        Trajectory grab_cone = drive.trajectoryBuilder(startPose)
+                .lineToLinearHeading(new Pose2d(grab_coneX, grab_coneY, grab_coneAngle))
+                .build();
+
+        /*
         Trajectory pos2 = drive.trajectoryBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(pos2X, pos2Y, pos2Angle))
                 .build();
-
+*/
         /*Trajectory pos1 = drive.trajectoryBuilder(pos2.end())
                 .lineToLinearHeading(new Pose2d(pos1X, pos1Y, pos1Angle))
                 .build();
@@ -110,11 +128,17 @@ public class RightScoreAuto extends LinearOpMode {
                     break;
 
                 case ALIGN:
-                    telemetry.addLine(String.valueOf(posEstimate.getX()));
-                    telemetry.update();
                     drive.followTrajectory(align_stack);
+                    drive.followTrajectory(lose_signal1);
+                    drive.followTrajectory(lose_signal2);
+                    currentState = State.GRAB_CONE;
+                    break;
+
+                case GRAB_CONE:
+                    drive.followTrajectory(grab_cone);
                     currentState = State.IDLE;
                     break;
+
 
 /*                case POS_DOS:
 

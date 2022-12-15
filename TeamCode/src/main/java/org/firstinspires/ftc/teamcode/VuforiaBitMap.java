@@ -35,8 +35,8 @@ public class VuforiaBitMap {
     private int redValue;
     private int blueValue;
     private int greenValue;
-    double expectedRatio1 = 0.2244897;
-    double expectedRatio2 = 0.0306513;
+    double expectedRatio1 = 2.1897;
+    double expectedRatio2 = 1980;
 
    // double ratio1;
     double ratio;
@@ -101,16 +101,17 @@ public class VuforiaBitMap {
         boolean posOne = false;
         boolean posTwo = false;
 
-        ratio = (double) (redValue)/(blueValue + redValue + greenValue);
+        ratio = (double) (blueValue)/(redValue + 0.1);
 
 
         double percentError1 = Math.abs((ratio - expectedRatio1)/ expectedRatio1);
         double percentError2 = Math.abs((ratio - expectedRatio2)/ expectedRatio2);
 
-        if (percentError1 < .1) {
+
+        if (percentError1 < .5) {
             posOne = true;
         }
-        if (percentError2 < 2) {
+        if (percentError2 < .2) {
             posTwo = true;
         }
 
