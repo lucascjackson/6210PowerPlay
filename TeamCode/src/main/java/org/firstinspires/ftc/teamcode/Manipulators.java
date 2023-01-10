@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 public class Manipulators {
@@ -25,6 +28,7 @@ public class Manipulators {
     //claw
     public Servo claw;
     public boolean open;
+    private LinearOpMode opMode;
 
 
     //Hardware Map
@@ -40,23 +44,25 @@ public class Manipulators {
 
         //lift Encoders
         lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
         lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     //LIFT METHODS
+    //Use encoder ticks to move the lift up 3 levels
 
     public void powerLift(double power){
         lift1.setPower(power);
         lift2.setPower(power);
     }
 
-    public int getLiftPosition() {
+
+
+   /* public int getLiftPosition() {
         return lift1.getCurrentPosition();
-    }
+    }*/
 
     public boolean liftIsDefault () {
         return !liftSensor.getState();
@@ -80,6 +86,7 @@ public class Manipulators {
 
 //Macro for the lift height
 //NUMBERS ARE PLACEHOLDERS
+   /*
     public void liftToHeight(int[] positions, String height){
         switch(height) {
             case "default":
@@ -120,5 +127,6 @@ public class Manipulators {
         return positions;
 
     }
+    */
 }
 

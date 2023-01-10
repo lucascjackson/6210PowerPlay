@@ -1,31 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.vuforia.CameraDevice;
 import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 //import org.openftc.easyopencv.OpenCvCamera;
 //import org.openftc.easyopencv.OpenCvCameraFactory;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
 import static android.graphics.Color.red;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import android.graphics.Bitmap;
-import android.graphics.Color;
 
 public class VuforiaBitMap {
 
@@ -35,8 +24,15 @@ public class VuforiaBitMap {
     private int redValue;
     private int blueValue;
     private int greenValue;
-    double expectedRatio1 = 2.1897;
-    double expectedRatio2 = 1980;
+    private int redValue2;
+    private int blueValue2;
+    private int greenValue2;
+    private int redValue3;
+    private int blueValue3;
+    private int greenValue3;
+
+    double expectedRatio2 = 0.0455;
+    double expectedRatio3 = 0.0119;
 
    // double ratio1;
     double ratio;
@@ -59,9 +55,8 @@ public class VuforiaBitMap {
         vuforia.setFrameQueueCapacity(1); //tells VuforiaLocalizer to only store one frame at a time
     }
 
-    int midH = 0;
-
-    int midW = 0;
+    int detectH = 0;
+    int detectW = 0;
 
     public Bitmap getBitmap() throws InterruptedException {
         Bitmap bm = null;
@@ -78,9 +73,9 @@ public class VuforiaBitMap {
             }
         }
 
-        midH = rgb.getHeight() / 2;
+        detectH = (rgb.getHeight() / 2)+120;
 
-        midW = rgb.getWidth() / 2;
+        detectW = (rgb.getWidth() / 2);
 
         // Create bitmap
         bm = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565);
@@ -95,51 +90,66 @@ public class VuforiaBitMap {
 
         Bitmap bm = this.getBitmap();
 
-        blueValue = blue(bm.getPixel(midW, midH));
-        greenValue = green(bm.getPixel(midW, midH));
-        redValue = red(bm.getPixel(midW, midH));
-        boolean posOne = false;
+        int detectRange=5;
+        blueValue = blue(bm.getPixel(detectW, detectH))
+                    + blue(bm.getPixel(detectW, detectH+detectRange))
+                    + blue(bm.getPixel(detectW, detectH-detectRange));
+        greenValue = green(bm.getPixel(detectW, detectH))
+                     + green(bm.getPixel(detectW, detectH+detectRange))
+                     + green(bm.getPixel(detectW, detectH-detectRange));
+        redValue = red(bm.getPixel(detectW, detectH))
+                   + red(bm.getPixel(detectW, detectH+detectRange))
+                   + red(bm.getPixel(detectW, detectH-detectRange));
+
+
+
+        blueValue/=3;
+        greenValue/=3;
+        redValue/=3;
+
+
         boolean posTwo = false;
+        boolean posThree = false;
 
-        ratio = (double) (blueValue)/(redValue + 0.1);
+        ratio = (double) (redValue)/(blueValue*greenValue);
 
 
-        double percentError1 = Math.abs((ratio - expectedRatio1)/ expectedRatio1);
         double percentError2 = Math.abs((ratio - expectedRatio2)/ expectedRatio2);
+        double percentError3 = Math.abs((ratio - expectedRatio3)/ expectedRatio3);
 
 
-        if (percentError1 < .5) {
-            posOne = true;
-        }
-        if (percentError2 < .2) {
+        if (percentError2 < .5) {
             posTwo = true;
         }
-
-        if (posOne && posTwo) {
-            if (percentError1 < percentError2) {
-                return 1;
-            } else return 2;
+        if (percentError3 < .5) {
+            posThree = true;
         }
 
-        if (posOne) {
-            return 1;
+        if (posTwo && posThree) {
+            if (percentError2 < percentError3) {
+                return 2;
+            } else return 3;
         }
 
         if (posTwo) {
             return 2;
         }
 
-        return  3;
+        if (posThree) {
+            return 3;
+        }
+
+        return  1;
     }
 
     public String colorFeedBack() {
 
         return "red: " + redValue + " green: " + greenValue + " blue: " + blueValue;
-
+        //return "midW: " + midW + " midH: " + midH + " useless: " + blueValue;
     }
 
     public String ratioFeedBack() {
-        return "ratio1: " + ratio;
+        return "ratio: " + ratio;
     }
 
 }
