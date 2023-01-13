@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.VuforiaBitMap;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
@@ -38,7 +37,6 @@ public class LeftAutoPushPark extends LinearOpMode {
     public static double align2x = 31;
     public static double align2y = -40;
     public static double align2angle = Math.toRadians(-258);
-
 
 
 

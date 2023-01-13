@@ -31,37 +31,37 @@ public class BigConeAutoRight extends LinearOpMode {
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
     Pose2d posEstimate;
 
-    public static double pushConeX = 75;
+    public static double pushConeX = 65;
     public static double pushConeY = 0;
     public static double pushConeAngle = 0;
 
-    public static double lineToConeX = 66;
+    public static double lineToConeX = 54;
     public static double lineToConeY = 0;
     public static double lineToConeAngle = 0;
 
-    public static double turnToConeX = 46;
-    public static double turnToConeY = 0;
+    public static double turnToConeX = 50;
+    public static double turnToConeY = 6.50521;
     public static double turnToConeAngle = Math.toRadians(270);
 
-    public static double pickUpConeX = 46;
-    public static double pickUpConeY = 20;
+    public static double pickUpConeX = 50;
+    public static double pickUpConeY = 22;
     public static double pickUpConeAngle = Math.toRadians(270);
 
-    public static double lineToPoleX = 46;
-    public static double lineToPoleY = -30;
+    public static double lineToPoleX = 50;
+    public static double lineToPoleY = -20;
     public static double lineToPoleAngle = Math.toRadians(270);
 
-    public static double turnToPoleX = 48;
-    public static double turnToPoleY = -20;
-    public static double turnToPoleAngle = Math.toRadians(230);
+    public static double turnToPoleX = 44;
+    public static double turnToPoleY = -16;
+    public static double turnToPoleAngle = Math.toRadians(200);
 
-    public static double moveToDepositX = 46;
-    public static double moveToDepositY = -10;
-    public static double moveToDepositAngle = Math.toRadians(230);
+    public static double moveToDepositX = 50;
+    public static double moveToDepositY = 0;
+    public static double moveToDepositAngle = Math.toRadians(200);
 
-    public static double turnToParkX = 46.001;
+    public static double turnToParkX = 50.001;
     public static double turnToParkY = -10.001;
-    public static double turnToParkAngle = Math.toRadians(270);
+    public static double turnToParkAngle = Math.toRadians(280);
 
     public static double startWait = 0;
 
@@ -120,7 +120,7 @@ public class BigConeAutoRight extends LinearOpMode {
         Trajectory turnToPark = drive.trajectoryBuilder(moveToDeposit.end())
                 .lineToLinearHeading(new Pose2d(turnToParkX, turnToParkY, turnToParkAngle))
                 .build();
-        telemetry.addLine("T8");
+        telemetry.addLine("T18");
         telemetry.update();
 
         currentState = State.WAIT;
