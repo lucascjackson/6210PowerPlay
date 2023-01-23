@@ -48,13 +48,16 @@ public class Manipulators {
 
         lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        lift2.setDirection(DcMotor.Direction.REVERSE);
+
     }
 
     //LIFT METHODS
     //Use encoder ticks to move the lift up 3 levels
 
     public void powerLift(double power){
-        lift1.setPower(power);
+        //lift1.setPower(power);
         lift2.setPower(power);
     }
 

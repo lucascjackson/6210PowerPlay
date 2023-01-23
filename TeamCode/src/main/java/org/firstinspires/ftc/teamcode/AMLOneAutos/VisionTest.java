@@ -6,14 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.VuforiaBitMap;
 import org.firstinspires.ftc.teamcode.VuforiaBitMap2;
+import org.firstinspires.ftc.teamcode.VuforiaBitMap3;
 
 @Config
 @Autonomous(name = "VisionTest", group = "Autonomous")
 public class VisionTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException{
-
-        VuforiaBitMap2 vuforia = new VuforiaBitMap2(this);
+        VuforiaBitMap3 vuforia = new VuforiaBitMap3(this);
 
         telemetry.addData("Position Detected: ", vuforia.LeftPostionVision());
         telemetry.addData("Color Feedback: ", vuforia.colorFeedBack());

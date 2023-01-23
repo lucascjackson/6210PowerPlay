@@ -31,8 +31,9 @@ public class VuforiaBitMap {
     private int blueValue3;
     private int greenValue3;
 
-    double expectedRatio2 = 0.0455;
-    double expectedRatio3 = 0.0119;
+    double expectedRatio1 = 134;
+    double expectedRatio2 = 7;
+    double expectedRatio3 = 19;
 
    // double ratio1;
     double ratio;
@@ -86,42 +87,59 @@ public class VuforiaBitMap {
     }
 
 
-    public int LeftPostionVision() throws InterruptedException{
+    public int LeftPostionVision() throws InterruptedException {
 
         Bitmap bm = this.getBitmap();
 
-        int detectRange=5;
+        int detectRange = 5;
         blueValue = blue(bm.getPixel(detectW, detectH))
-                    + blue(bm.getPixel(detectW, detectH+detectRange))
-                    + blue(bm.getPixel(detectW, detectH-detectRange));
+                + blue(bm.getPixel(detectW, detectH + detectRange))
+                + blue(bm.getPixel(detectW, detectH - detectRange));
         greenValue = green(bm.getPixel(detectW, detectH))
-                     + green(bm.getPixel(detectW, detectH+detectRange))
-                     + green(bm.getPixel(detectW, detectH-detectRange));
+                + green(bm.getPixel(detectW, detectH + detectRange))
+                + green(bm.getPixel(detectW, detectH - detectRange));
         redValue = red(bm.getPixel(detectW, detectH))
-                   + red(bm.getPixel(detectW, detectH+detectRange))
-                   + red(bm.getPixel(detectW, detectH-detectRange));
+                + red(bm.getPixel(detectW, detectH + detectRange))
+                + red(bm.getPixel(detectW, detectH - detectRange));
 
 
+        blueValue /= 3;
+        greenValue /= 3;
+        redValue /= 3;
 
-        blueValue/=3;
-        greenValue/=3;
-        redValue/=3;
-
-
+        boolean posOne = false;
         boolean posTwo = false;
         boolean posThree = false;
 
-        ratio = (double) (redValue)/(blueValue*greenValue);
+        if ((greenValue - redValue/ redValue < 0.08)) {
+
+            return 3;
+        }
+
+        else if (greenValue > redValue) {
+
+            return 1;
+        }
+
+        else {
+
+            return 2;
+        }
+
+    }
 
 
+        //ratio = (double) (blueValue*greenValue)/((redValue) + 1);
+
+        /*
         double percentError2 = Math.abs((ratio - expectedRatio2)/ expectedRatio2);
         double percentError3 = Math.abs((ratio - expectedRatio3)/ expectedRatio3);
 
 
-        if (percentError2 < .5) {
+        if (percentError2 < .3) {
             posTwo = true;
         }
-        if (percentError3 < .5) {
+        if (percentError3 < .3) {
             posThree = true;
         }
 
@@ -142,6 +160,8 @@ public class VuforiaBitMap {
         return  1;
     }
 
+*/
+
     public String colorFeedBack() {
 
         return "red: " + redValue + " green: " + greenValue + " blue: " + blueValue;
@@ -149,7 +169,9 @@ public class VuforiaBitMap {
     }
 
     public String ratioFeedBack() {
-        return "ratio: " + ratio;
+        return "ratio: ";
     }
+
+
 
 }

@@ -5,8 +5,11 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Manipulators;
 import org.firstinspires.ftc.teamcode.VuforiaBitMap;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
@@ -16,7 +19,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Config
 @Autonomous(name = "BetterOdomPark", group = "Autonomous")
 
-public class BetterOdomPark extends LinearOpMode {
+public class
+BetterOdomPark extends LinearOpMode {
 
     enum State {
 

@@ -5,7 +5,6 @@ import static android.graphics.Color.green;
 import static android.graphics.Color.red;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.vuforia.Image;
@@ -14,7 +13,7 @@ import com.vuforia.PIXEL_FORMAT;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
-public class VuforiaBitMap2 {
+public class VuforiaBitMap3 {
 
     private LinearOpMode robot;
     private VuforiaLocalizer vuforia;
@@ -28,17 +27,15 @@ public class VuforiaBitMap2 {
     private int redValue3;
     private int blueValue3;
     private int greenValue3;
-    private float hue;
-    private float saturation;
-    private float brightness;
 
-    double expectedRatio2 = 0.0455;
-    double expectedRatio3 = 0.0119;
+    double expectedRatio1 = 134;
+    double expectedRatio2 = 7;
+    double expectedRatio3 = 19;
 
-    // double ratio1;
+   // double ratio1;
     double ratio;
 
-    public VuforiaBitMap2(LinearOpMode robot) {
+    public VuforiaBitMap3(LinearOpMode robot) {
         this.robot = robot;
         //Create vuforia object
         this.vuforia = null;
@@ -68,13 +65,13 @@ public class VuforiaBitMap2 {
 
         // Iterate through all the images
         long num = frame.getNumImages();
-        for (int i = 0; i < num; i++) {
-            if (frame.getImage(i).getFormat() == PIXEL_FORMAT.RGB565) {
+        for(int i = 0; i < num; i++){
+            if(frame.getImage(i).getFormat() == PIXEL_FORMAT.RGB565){
                 rgb = frame.getImage(i);
             }
         }
 
-        detectH = (rgb.getHeight() / 2) + 120;
+        detectH = (rgb.getHeight() / 2)+120;
 
         detectW = (rgb.getWidth() / 2);
 
@@ -87,7 +84,7 @@ public class VuforiaBitMap2 {
     }
 
 
-    public int LeftPostionVision() throws InterruptedException {
+    public Object LeftPostionVision() throws InterruptedException {
 
         Bitmap bm = this.getBitmap();
 
@@ -107,38 +104,33 @@ public class VuforiaBitMap2 {
         greenValue /= 3;
         redValue /= 3;
 
-        //convert the  rgb values to HSB
-        float[] hsv = new float[3];
-        Color.RGBToHSV(redValue, greenValue, blueValue, hsv);
-
-        hue=hsv[0];
-
-
-        if ((hue > 185) && (hue < 262)){
-            return 3;
-        }
-        else if(hue>67 && hue>167){
-            return 1;
-        }
-        else {
-            return 2;
-        }
-    }
-
-
+        boolean posOne = false;
         boolean posTwo = false;
         boolean posThree = false;
 
 
+        if (blueValue > redValue && blueValue > greenValue) {
+            return 3;
+        } else if (redValue > blueValue && redValue > greenValue) {
+            return 2;
+        } else if (greenValue > blueValue && greenValue > redValue) {
+            return 1;
+        }
+        else{
 
-    public String colorFeedBack() {
-
-        //return "red: " + hsv[0] + " green: " + hsv[1] + " blue: " + hsv[2];
-        return "h: " + hue + " s: " + saturation + " v: " + brightness;
+            return 0;
+        }
     }
 
-    public String ratioFeedBack() {
-        return "ratio: " + ratio;
+        public String colorFeedBack() {
+            return "red: " + redValue + " green: " + greenValue + " blue: " + blueValue;
+            //return "midW: " + midW + " midH: " + midH + " useless: " + blueValue;
+        }
+
+    /*public String ratioFeedBack() {
+        return ;
+    }*/
+
     }
 
-}
+
