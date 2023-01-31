@@ -84,7 +84,7 @@ public class VuforiaBitMap3 {
     }
 
 
-    public Object LeftPostionVision() throws InterruptedException {
+    public Object leftPositionVision() throws InterruptedException {
 
         Bitmap bm = this.getBitmap();
 

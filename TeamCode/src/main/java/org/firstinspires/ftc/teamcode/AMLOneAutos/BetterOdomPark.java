@@ -5,16 +5,10 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Manipulators;
-import org.firstinspires.ftc.teamcode.VuforiaBitMap;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.VuforiaBitMap3;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
 @Autonomous(name = "BetterOdomPark", group = "Autonomous")
@@ -34,16 +28,17 @@ BetterOdomPark extends LinearOpMode {
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
     Pose2d posEstimate;
 
-    public static double pos2X = 26;
+    public static double pos2X = 24;
     public static int pos2Y = 0;
     public static double pos2Angle = Math.toRadians(0);
 
-    public static double pos1X = 28;
+    public static double pos1X = 24;
     public static double pos1Y = -22.43 * 2;
     public static double pos1Angle = Math.toRadians(0);
 
-    public static double pos3X = 28;
-    public static  double pos3Y = 24.51 * 2;
+    public static double pos3X = 24;
+    public static  double pos3Y = 21.5 
+            * 2;
     public static double pos3Angle = Math.toRadians(-10);
 
     public static double startWait = 0;
@@ -54,7 +49,7 @@ BetterOdomPark extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        VuforiaBitMap vuforia = new VuforiaBitMap(this);
+        VuforiaBitMap3 vuforia = new VuforiaBitMap3(this);
 
         drive.setPoseEstimate(startPose);
 
@@ -81,7 +76,7 @@ BetterOdomPark extends LinearOpMode {
 
         waitTimer.reset();
 
-        int pos = vuforia.LeftPostionVision();
+        int pos = (int) vuforia.leftPositionVision();
         telemetry.addData("Pos: ",pos);
         telemetry.update();
         while (opModeIsActive() && !isStopRequested()) {

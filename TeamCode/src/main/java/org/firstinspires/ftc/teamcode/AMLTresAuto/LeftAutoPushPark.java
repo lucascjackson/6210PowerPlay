@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.VuforiaBitMap;
+import org.firstinspires.ftc.teamcode.VuforiaBitMap3;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 @Config
@@ -36,7 +37,7 @@ public class LeftAutoPushPark extends LinearOpMode {
 
     public static double align2x = 31;
     public static double align2y = -40;
-    public static double align2angle = Math.toRadians(-258);
+    public static double align2angle = Math.toRadians(-255);
 
 
 
@@ -48,9 +49,9 @@ public class LeftAutoPushPark extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        VuforiaBitMap vuforia = new VuforiaBitMap(this);
+        VuforiaBitMap3 vuforia = new VuforiaBitMap3(this);
 
-        int pos = vuforia.LeftPostionVision();
+        int pos = (int) vuforia.leftPositionVision();
         telemetry.addData("Pos: ", pos);
         telemetry.update();
 
@@ -79,7 +80,7 @@ public class LeftAutoPushPark extends LinearOpMode {
 
 
         Trajectory pos_dos = drive.trajectoryBuilder(align2.end())
-                .lineToLinearHeading(new Pose2d(align2x, (align2y+20), align2angle))
+                .lineToLinearHeading(new Pose2d(align2x, (align2y+23), align2angle))
                 .build();
 
         Trajectory pos_tres = drive.trajectoryBuilder(align2.end())
