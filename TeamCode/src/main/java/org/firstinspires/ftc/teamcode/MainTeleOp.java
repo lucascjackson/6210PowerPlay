@@ -150,7 +150,7 @@ public class MainTeleOp extends OpMode {
             motorPower = move.holonomicDrive(0, 0, 0);
         }
 
-        move.setPowers(motorPower);
+        move.setPowers(motorPower[0], motorPower[1]*0.8, motorPower[2]*0.8, motorPower[3]*0.9333333333);
 
         //Lift MACROS
 

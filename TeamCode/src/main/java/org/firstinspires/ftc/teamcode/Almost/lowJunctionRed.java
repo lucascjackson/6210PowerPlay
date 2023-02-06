@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.AMLTresAuto.BigConeAutoRight;
 import org.firstinspires.ftc.teamcode.AMLTresAuto.LeftAutoPushPark;
 import org.firstinspires.ftc.teamcode.Manipulators;
+import org.firstinspires.ftc.teamcode.Movement;
 import org.firstinspires.ftc.teamcode.VuforiaBitMap;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 public class lowJunctionRed extends LinearOpMode{
 
     Manipulators manip;
+    Movement move;
     private DcMotor lift2;
     public DigitalChannel liftSensor;
 
@@ -160,6 +162,10 @@ public class lowJunctionRed extends LinearOpMode{
                 case GET_CONE:
 
                     drive.followTrajectory(turnToAlign);
+
+
+                        move.setPowers(1,.8,.8,.9333333333);
+
                     currentState = lowJunctionRed.State.SCORE_CONE;
                     break;
 

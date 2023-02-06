@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 @Config
 public class Manipulators {
@@ -30,6 +32,9 @@ public class Manipulators {
     public boolean open;
     private LinearOpMode opMode;
 
+    //color sensor
+    public ColorSensor colorSensorFront;
+    public ColorSensor colorSensorBack;
 
     //Hardware Map
     public Manipulators(HardwareMap robot) {
@@ -41,6 +46,10 @@ public class Manipulators {
 
         //claw mapping
         claw = robot.get(Servo.class, "claw");
+
+        //color sensor
+        colorSensorBack = robot.colorSensor.get("colorSensorBack");
+        colorSensorFront = robot.colorSensor.get("colorSensorFront");
 
         //lift Encoders
         lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -56,7 +65,7 @@ public class Manipulators {
     //LIFT METHODS
     //Use encoder ticks to move the lift up 3 levels
 
-    public void powerLift(double power){
+    public void powerLift(double power) {
         //lift1.setPower(power);
         lift2.setPower(power);
         lift1.setPower(power);
@@ -64,73 +73,61 @@ public class Manipulators {
 
 
 
+
    /* public int getLiftPosition() {
         return lift1.getCurrentPosition();
     }*/
 
-    public boolean liftIsDefault () {
+    public boolean liftIsDefault() {
         return !liftSensor.getState();
     }
 
     //CLAWS METHODS
 
-    public void clawOpen(){
+    public void clawOpen() {
         claw.setPosition(.6);
         open = true;
     }
 
-    public void clawClose(){
+    public void clawClose() {
         claw.setPosition(1.1);
         open = false;
     }
 
     public boolean clawIsOpen() {
-       return open;
+        return open;
     }
 
-//Macro for the lift height
-//NUMBERS ARE PLACEHOLDERS
-   /*
-    public void liftToHeight(int[] positions, String height){
-        switch(height) {
-            case "default":
-                lift1.setTargetPosition(positions[0]);
-                lift2.setTargetPosition(positions[0]);
-                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                break;
-            case "low":
-                lift1.setTargetPosition(positions[1]);
-                lift2.setTargetPosition(positions[1]);
-                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                break;
-            case "mid":
-                lift1.setTargetPosition(positions[2]);
-                lift2.setTargetPosition(positions[2]);
-                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                break;
-            case "high":
-                lift1.setTargetPosition(positions[3]);
-                lift2.setTargetPosition(positions[3]);
-                lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                break;
+    public boolean colorBackIsActive() {
+        if (colorSensorBack.red() > 0 || colorSensorBack.blue() > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public int[] setPositions() {
-        defaultPos = lift1.getCurrentPosition();
-        pos1 = defaultPos - 1000;
-        pos2 = defaultPos - 2000;
-        pos3 = defaultPos - 4500;
-
-        int[] positions = {defaultPos, pos1, pos2, pos3};
-
-        return positions;
-
+    public boolean colorFrontIsActive() {
+        if (colorSensorFront.red() > 0 || colorSensorFront.blue() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    */
-}
 
+    public int colorRedBack() {
+        return colorSensorBack.red();
+    }
+
+    public int colorBlueBack() {
+        return colorSensorBack.blue();
+    }
+
+    public int colorRedFront() {
+        return colorSensorFront.red();
+    }
+
+    public int colorBlueFront() {
+        return colorSensorFront.blue();
+    }
+
+}
