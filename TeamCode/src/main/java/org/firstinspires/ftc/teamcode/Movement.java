@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.internal.stellaris.FlashLoaderManager;
+
 public class Movement {
 
     HardwareMap robot;
@@ -12,6 +14,12 @@ public class Movement {
     private DcMotor FR;
     private DcMotor BL;
     private DcMotor BR;
+
+    double FLM = .5;
+    double FRM = .5;
+    double BLM = .5;
+    double BRM = .5;
+
 
     public Movement(HardwareMap hardwareMap) {
         this.robot = hardwareMap;
@@ -26,10 +34,15 @@ public class Movement {
         BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        FL.setDirection(DcMotor.Direction.REVERSE);
+        FL.setDirection(DcMotor.Direction.FORWARD);
         FR.setDirection(DcMotor.Direction.REVERSE);
-        BL.setDirection(DcMotor.Direction.FORWARD);
+        BL.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
+
+        FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public double[] holonomicDrive(double leftX, double leftY, double rightX) {
@@ -43,12 +56,27 @@ public class Movement {
 
     public void setPowers(double[] motorPower) {
 
-        FR.setPower(motorPower[0]);
-        FL.setPower(motorPower[1]);
-        BR.setPower(motorPower[2]);
-        BL.setPower(motorPower[3]);
+        FR.setPower(motorPower[0]*FRM);
+        FL.setPower(motorPower[1]*FLM);
+        BR.setPower(motorPower[2]*BRM);
+        BL.setPower(motorPower[3]*BLM);
     }
 
+    public void FLMulti(double multi) {
+        FLM += multi;
+    }
+
+    public void FRMulti(double multi) {
+        FRM += multi;
+    }
+
+    public void BLMulti(double multi) {
+        BLM += multi;
+    }
+
+    public void BRMulti(double multi) {
+        BRM += multi;
+    }
 
     public void AML1Park(int colorCase) {
 

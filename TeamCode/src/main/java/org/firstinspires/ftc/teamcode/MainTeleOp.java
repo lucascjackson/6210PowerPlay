@@ -139,7 +139,7 @@ public class MainTeleOp extends OpMode {
             Math.abs(gamepad1.right_stick_x) > 0.1) {
 
             leftY = gamepad1.left_stick_y/1.5;
-            leftX = gamepad1.left_stick_x;
+            leftX = -1*(gamepad1.left_stick_x);
             rightX = (-gamepad1.right_stick_x)/1.5;
 
             motorPower = move.holonomicDrive(leftX/halfspeedDivider, leftY/halfspeedDivider, rightX/halfspeedDivider);

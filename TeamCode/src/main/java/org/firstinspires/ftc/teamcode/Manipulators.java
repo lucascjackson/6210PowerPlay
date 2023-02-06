@@ -59,6 +59,7 @@ public class Manipulators {
     public void powerLift(double power){
         //lift1.setPower(power);
         lift2.setPower(power);
+        lift1.setPower(power);
     }
 
 
