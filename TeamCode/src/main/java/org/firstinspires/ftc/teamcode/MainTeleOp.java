@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.opMode;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.configuration.annotations.MotorType;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -19,7 +16,7 @@ public class MainTeleOp extends OpMode {
     public HashMap<String, Boolean> buttons = new HashMap<String, Boolean>();
     double[] motorPower = {0, 0, 0, 0};
     boolean open = true;
-    private double halfspeedDivider;
+    private int halfspeedDivider;
    // private int lift1PosDefault = manip.lift1.getCurrentPosition();
    // private int lift2PosDefault = manip.lift2.getCurrentPosition();
 
@@ -35,7 +32,8 @@ public class MainTeleOp extends OpMode {
         manip.clawOpen();
 
         //positions = manip.setPositions();
-        halfspeedDivider = 1.5;
+        halfspeedDivider = 1;
+
         telemetry.addData("init", "completed");
         telemetry.update();
     }
@@ -71,10 +69,21 @@ public class MainTeleOp extends OpMode {
 
        telemetry.setAutoClear(false);
        telemetry.addData("lift1 position", manip.lift1.getCurrentPosition());
-       telemetry.addData("lift2 position", manip.lift2.getCurrentPosition());
+      // telemetry.addData("lift2 position", manip.lift2.getCurrentPosition());
        telemetry.update();
 
+       /*if (gamepad2.a){
+           liftTarget = 200;
+       liftSpeed = 0.5;
+       liftCurrentDirection = "up";
 
+       manip.lift1.setPower(liftSpeed);
+       manip.lift2.setPower(liftSpeed);
+
+       manip.lift1.setTargetPosition(liftTarget);
+       manip.lift2.setTargetPosition(liftTarget);
+       }
+    }*/
 
 
         /*if (!manip.liftIsDefault()) {
