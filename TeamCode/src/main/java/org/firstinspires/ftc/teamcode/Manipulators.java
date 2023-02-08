@@ -35,6 +35,7 @@ public class Manipulators {
     //color sensor
     public ColorSensor colorSensorFront;
     public ColorSensor colorSensorBack;
+    //public ColorSensor color;
 
     //Hardware Map
     public Manipulators(HardwareMap robot) {
@@ -113,6 +114,17 @@ public class Manipulators {
             return false;
         }
     }
+
+    /*
+    public boolean colorIsActive() {
+        if (color.red() > 0 || color.blue() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+     */
 
     public int colorRedBack() {
         return colorSensorBack.red();

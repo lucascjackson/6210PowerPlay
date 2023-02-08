@@ -55,7 +55,7 @@ public class OdomParkAuto extends LinearOpMode {
                 .build();
 
         Trajectory pos3 = drive.trajectoryBuilder(pos2.end())
-                .lineToLinearHeading(new Pose2d(pos3X, pos3Y, pos1Angle))
+                .lineToLinearHeading(new Pose2d(pos3X, pos3Y, pos3Angle))
                 .build();
 
 

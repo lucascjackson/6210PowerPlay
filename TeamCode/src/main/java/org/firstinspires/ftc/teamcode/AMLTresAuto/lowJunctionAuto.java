@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.AMLOneAutos.BetterOdomPark;
 import org.firstinspires.ftc.teamcode.Manipulators;
+import org.firstinspires.ftc.teamcode.Movement;
 import org.firstinspires.ftc.teamcode.VuforiaBitMap;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -30,10 +31,14 @@ public class lowJunctionAuto extends LinearOpMode{
         TURN_TO_ALIGN_STACK,
         GO_FORWARD_PICK_UP_CONE,
         SCORE_LOW,
-        GO_FORWARD_PICK_UP_CONE2,
-        SCORE_LOW2,
         PARK
     }
+
+    int cycleCount = 0;
+
+
+    Manipulators manip;
+    Movement move;
 
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
     Pose2d posEstimate;
@@ -58,9 +63,20 @@ public class lowJunctionAuto extends LinearOpMode{
     public static double scoreLowY = -40;
     public static double scoreLowAngle = Math.toRadians(-258);
 
-    public static double pickUpCone2X = 31;
-    public static double pickUpCone2Y = -40;
-    public static double pickUpCone2Angle = Math.toRadians(-258);
+
+
+    public static double posUnoX = 0;
+    public static double posUnoY = 0;
+    public static double posUnoAngle = Math.toRadians(0);
+
+    public static double posDosX = 0;
+    public static double posDosY = 0;
+    public static double posDosAngle = Math.toRadians(0);
+
+    public static double posTresX = 0;
+    public static double posTresY = 0;
+    public static double posTresAngle = Math.toRadians(0);
+
 
 
 
@@ -74,8 +90,8 @@ public class lowJunctionAuto extends LinearOpMode{
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         VuforiaBitMap vuforia = new VuforiaBitMap(this);
 
-        int pos = vuforia.LeftPostionVision();
-        telemetry.addData("Pos: ", pos);
+        int parkPos = vuforia.LeftPostionVision();
+        telemetry.addData("Pos: ", parkPos);
         telemetry.update();
 
         drive.setPoseEstimate(startPose);
@@ -101,6 +117,10 @@ public class lowJunctionAuto extends LinearOpMode{
                 .lineToLinearHeading(new Pose2d(turnToAlignX, turnToAlignY, turnToAlignAngle))
                 .build();
 
+        Trajectory alignWithWall = drive.trajectoryBuilder(turnToAlign.end())
+                .lineToLinearHeading(new Pose2d(turnToAlign.end().getX(), turnToAlign.end().getY()+.01, pickUpConeAngle))
+                .build();
+
         Trajectory pickUpCone = drive.trajectoryBuilder(turnToAlign.end())
                 .lineToLinearHeading(new Pose2d(pickUpConeX, pickUpConeY, pickUpConeAngle))
                 .build();
@@ -109,19 +129,18 @@ public class lowJunctionAuto extends LinearOpMode{
                 .lineToLinearHeading(new Pose2d(scoreLowX, scoreLowY, scoreLowAngle))
                 .build();
 
-        Trajectory pickUpCone2 = drive.trajectoryBuilder(scoreLow.end())
-                .lineToLinearHeading(new Pose2d(scoreLowX, scoreLowY, scoreLowAngle))
+        Trajectory pos_uno = drive.trajectoryBuilder(scoreLow.end())
+                .lineToLinearHeading(new Pose2d(posUnoX, posUnoY, posUnoAngle))
                 .build();
 
-/*
-        Trajectory pos_dos = drive.trajectoryBuilder(align2.end())
-                .lineToLinearHeading(new Pose2d(align2x, (align2y+20), align2angle))
+        Trajectory pos_dos = drive.trajectoryBuilder(scoreLow.end())
+                .lineToLinearHeading(new Pose2d(posDosX, posDosY, posDosAngle))
                 .build();
 
-        Trajectory pos_tres = drive.trajectoryBuilder(align2.end())
-                .lineToLinearHeading(new Pose2d(align2x, (align2y+(23*2)), align2angle))
+        Trajectory pos_tres = drive.trajectoryBuilder(scoreLow.end())
+                .lineToLinearHeading(new Pose2d(posTresX, posTresY, posTresAngle))
                 .build();
-*/
+
 
         currentState = lowJunctionAuto.State.WAIT;
 
@@ -158,54 +177,67 @@ public class lowJunctionAuto extends LinearOpMode{
                     break;
 
                 case TURN_TO_ALIGN_STACK:
+
+                    boolean isAligned = false;
+
                     drive.followTrajectory(turnToAlign);
+
+                    while (!isAligned) {
+                        while (!manip.colorBackIsActive() || !manip.colorFrontIsActive()) {
+                            move.setPowers(-1, 0.8, 0.8, -0.9333333333);
+                        }
+                        if (manip.colorBackIsActive() && manip.colorFrontIsActive()) {
+                            isAligned = true;
+                        } else {
+                            drive.followTrajectory(alignWithWall);
+                        }
+                    }
+
+                    /*
+                    while (!manip.colorIsActive()) {
+                        move.setPowers(-1, 0.8, 0.8, -0.9333333333);
+                    }
+
+                    drive.followTrajectory(alignWithWall);
+                     */
+
                     currentState = State.GO_FORWARD_PICK_UP_CONE;
-
-
                     break;
 
                 case GO_FORWARD_PICK_UP_CONE:
                     drive.followTrajectory(pickUpCone);
                     currentState = State.SCORE_LOW;
 
-
                     break;
 
                 case SCORE_LOW:
                     drive.followTrajectory(scoreLow);
-                    currentState = State.GO_FORWARD_PICK_UP_CONE2;
 
+                    if (cycleCount > 4) {
+                        currentState = State.PARK;
+                    }
 
-                    break;
-
-                case GO_FORWARD_PICK_UP_CONE2:
-                    drive.followTrajectory(pickUpCone2);
-                    currentState = State.SCORE_LOW;
-
+                    cycleCount++;
+                    currentState = State.GO_FORWARD_PICK_UP_CONE;
 
                     break;
 
-                case SCORE_LOW2:
-                    drive.followTrajectory(scoreLow);
-                    currentState = State.PARK;
 
-
-                    break;
-/*
                 case PARK:
-                    if      (pos==1){
+                    if (parkPos==1){
+                        drive.followTrajectory(pos_uno);
                         currentState = lowJunctionAuto.State.IDLE;
                     }
-                    else if (pos==2){
+                    else if (parkPos==2){
                         drive.followTrajectory(pos_dos);
                         currentState = lowJunctionAuto.State.IDLE;
                     }
-                    else{
+                    else {
                         drive.followTrajectory(pos_tres);
                         currentState = lowJunctionAuto.State.IDLE;
                     }
                     break;
-*/
+
                 case IDLE:
 
                     break;
