@@ -8,10 +8,11 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
-@TeleOp(name = "Lift Test")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Lift Test", group="TeleOp")
 public class LiftTest extends LinearOpMode {
     Manipulators manip;
     private DcMotor lift2;
+    private DcMotor lift1;
     public DigitalChannel liftSensor;
 
     @Override
@@ -22,15 +23,23 @@ public class LiftTest extends LinearOpMode {
         lift2.setDirection(DcMotor.Direction.REVERSE);
         lift2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        lift1 = hardwareMap.dcMotor.get("lift1");
+        lift1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift1.setDirection(DcMotor.Direction.REVERSE);
+        lift1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
 
         liftSensor = hardwareMap.get(DigitalChannel.class, "liftSensor");
 
         telemetry.setAutoClear(false);
-        Telemetry.Item liftPosition = telemetry.addData("Lift Position", lift2.getCurrentPosition());
+        Telemetry.Item lift1Position = telemetry.addData("Lift1 Position", lift1.getCurrentPosition());
+        Telemetry.Item lift2Position = telemetry.addData("Lift2 Position", lift2.getCurrentPosition());
 
 
         while(!isStarted()){
-            liftPosition.setValue(lift2.getCurrentPosition());
+            lift1Position.setValue(lift1.getCurrentPosition());
+            lift2Position.setValue(lift2.getCurrentPosition());
             telemetry.update();
         }
 
@@ -71,7 +80,8 @@ public class LiftTest extends LinearOpMode {
 
             idle();
             if( lift2.isBusy() ){
-                liftPosition.setValue(lift2.getCurrentPosition());
+                lift1Position.setValue(lift2.getCurrentPosition());
+                lift2Position.setValue(lift2.getCurrentPosition());
                 telemetry.update();
             }
 

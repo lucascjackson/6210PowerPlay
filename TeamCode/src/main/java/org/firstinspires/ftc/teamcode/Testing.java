@@ -30,7 +30,7 @@ public class Testing extends OpMode {
 
     public void init() {
         move = new Movement(hardwareMap);
-
+        manip = new Manipulators(hardwareMap);
 
         //positions = manip.setPositions();
         telemetry.addData("init", "completed");
@@ -108,10 +108,8 @@ public class Testing extends OpMode {
         telemetry.addData("FL power: ", FLM);
         telemetry.addData("BR power: ", BRM);
         telemetry.addData("BL power: ", BLM);
-        telemetry.addData("ColorBackBlue: ", manip.colorBlueBack());
-        telemetry.addData("ColorBackRed: ", manip.colorRedBack());
-        telemetry.addData("ColorFrontBlue: ", manip.colorBlueFront());
-        telemetry.addData("ColorFrontRed: ", manip.colorRedFront());
+        telemetry.addData("Blue: ", manip.colorBlue());
+        telemetry.addData("Red: ", manip.colorRed());
 
         telemetry.update();
     }
