@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.AMLOneAutos.BetterOdomPark;
 import org.firstinspires.ftc.teamcode.Manipulators;
-import org.firstinspires.ftc.teamcode.Movement;
 import org.firstinspires.ftc.teamcode.VuforiaBitMap;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -40,19 +39,19 @@ public class lowJunctionAuto extends LinearOpMode{
     Pose2d posEstimate;
 
     public static double goToWallX = 0;
-    public static double goToWallY = 25;
+    public static double goToWallY = 40;
     public static double goToWallAngle = 0;
 
-    public static double goToStackX = 35;
-    public static double goToStackY = 26;
+    public static double goToStackX =-60;
+    public static double goToStackY = 40;
     public static double goToStackAngle = 0;
 
-    public static double turnToAlignX = 41;
-    public static double turnToAlignY = 21;
-    public static double turnToAlignAngle = Math.toRadians(331);
+    public static double turnToAlignX = -61;
+    public static double turnToAlignY = 40;
+    public static double turnToAlignAngle = Math.toRadians(-258);
 
-    public static double pickUpConeX = -31;
-    public static double pickUpConeY = 40;
+    public static double pickUpConeX = 31;
+    public static double pickUpConeY = -40;
     public static double pickUpConeAngle = Math.toRadians(-258);
 
     public static double scoreLowX = 31;
@@ -74,8 +73,6 @@ public class lowJunctionAuto extends LinearOpMode{
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         VuforiaBitMap vuforia = new VuforiaBitMap(this);
-        Manipulators manip = new Manipulators(hardwareMap);
-        Movement move = new Movement(hardwareMap);
 
         int pos = vuforia.LeftPostionVision();
         telemetry.addData("Pos: ", pos);
@@ -104,8 +101,6 @@ public class lowJunctionAuto extends LinearOpMode{
                 .lineToLinearHeading(new Pose2d(turnToAlignX, turnToAlignY, turnToAlignAngle))
                 .build();
 
-        /*
-
         Trajectory pickUpCone = drive.trajectoryBuilder(turnToAlign.end())
                 .lineToLinearHeading(new Pose2d(pickUpConeX, pickUpConeY, pickUpConeAngle))
                 .build();
@@ -118,7 +113,7 @@ public class lowJunctionAuto extends LinearOpMode{
                 .lineToLinearHeading(new Pose2d(scoreLowX, scoreLowY, scoreLowAngle))
                 .build();
 
-
+/*
         Trajectory pos_dos = drive.trajectoryBuilder(align2.end())
                 .lineToLinearHeading(new Pose2d(align2x, (align2y+20), align2angle))
                 .build();
@@ -164,18 +159,11 @@ public class lowJunctionAuto extends LinearOpMode{
 
                 case TURN_TO_ALIGN_STACK:
                     drive.followTrajectory(turnToAlign);
-
-                    while(!manip.colorIsActive()) {
-                        move.setPowers(0.5, 0.4, 0.4, 0.4666666);
-                    }
-
-                    move.setPowers(0,0,0,0);
-
                     currentState = State.IDLE;
 
-
-                    break;
 /*
+                    break;
+
                 case GO_FORWARD_PICK_UP_CONE:
                     drive.followTrajectory(pickUpCone);
                     currentState = State.SCORE_LOW;
