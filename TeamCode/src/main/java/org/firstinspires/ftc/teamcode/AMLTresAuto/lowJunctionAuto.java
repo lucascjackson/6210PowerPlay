@@ -39,16 +39,16 @@ public class lowJunctionAuto extends LinearOpMode{
     Pose2d posEstimate;
 
     public static double goToWallX = 0;
-    public static double goToWallY = 40;
+    public static double goToWallY = -100;
     public static double goToWallAngle = 0;
 
-    public static double goToStackX =-60;
-    public static double goToStackY = 40;
+    public static double goToStackX =-40;
+    public static double goToStackY = -100;
     public static double goToStackAngle = 0;
 
-    public static double turnToAlignX = -61;
-    public static double turnToAlignY = 40;
-    public static double turnToAlignAngle = Math.toRadians(-258);
+    public static double turnToAlignX = -41;
+    public static double turnToAlignY = -100;
+    public static double turnToAlignAngle = 5.68;
 
     public static double pickUpConeX = 31;
     public static double pickUpConeY = -40;
@@ -100,7 +100,7 @@ public class lowJunctionAuto extends LinearOpMode{
         Trajectory turnToAlign = drive.trajectoryBuilder(goToStack.end())
                 .lineToLinearHeading(new Pose2d(turnToAlignX, turnToAlignY, turnToAlignAngle))
                 .build();
-
+/*
         Trajectory pickUpCone = drive.trajectoryBuilder(turnToAlign.end())
                 .lineToLinearHeading(new Pose2d(pickUpConeX, pickUpConeY, pickUpConeAngle))
                 .build();
@@ -113,7 +113,7 @@ public class lowJunctionAuto extends LinearOpMode{
                 .lineToLinearHeading(new Pose2d(scoreLowX, scoreLowY, scoreLowAngle))
                 .build();
 
-/*
+
         Trajectory pos_dos = drive.trajectoryBuilder(align2.end())
                 .lineToLinearHeading(new Pose2d(align2x, (align2y+20), align2angle))
                 .build();
