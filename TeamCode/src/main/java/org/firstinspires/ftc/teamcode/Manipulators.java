@@ -74,12 +74,28 @@ public class Manipulators {
         lift1.setPower(power);
     }
 
+    public void moveLiftTo(int pos) {
 
+        powerLift(-0.7);
 
+        lift1.setTargetPosition(lift1.getCurrentPosition() + pos);
+        lift2.setTargetPosition(lift2.getCurrentPosition() + pos);
 
-   /* public int getLiftPosition() {
-        return lift1.getCurrentPosition();
-    }*/
+        lift1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void returnLiftToDefault() {
+        lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lift2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        while(!liftIsDefault()) {
+            powerLift(0.7);
+
+        }
+
+        powerLift(0);
+    }
 
     public boolean liftIsDefault() {
         return !liftSensor.getState();

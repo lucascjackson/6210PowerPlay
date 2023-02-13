@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.AMLTresAuto;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import android.text.method.MovementMethod;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,6 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.AMLOneAutos.BetterOdomPark;
 import org.firstinspires.ftc.teamcode.Manipulators;
+import org.firstinspires.ftc.teamcode.Movement;
 import org.firstinspires.ftc.teamcode.VuforiaBitMap;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -30,8 +33,6 @@ public class lowJunctionAuto extends LinearOpMode{
         TURN_TO_ALIGN_STACK,
         GO_FORWARD_PICK_UP_CONE,
         SCORE_LOW,
-        GO_FORWARD_PICK_UP_CONE2,
-        SCORE_LOW2,
         PARK
     }
 
@@ -50,21 +51,37 @@ public class lowJunctionAuto extends LinearOpMode{
     public static double turnToAlignY = -100;
     public static double turnToAlignAngle = 5.68;
 
-    public static double pickUpConeX = 31;
-    public static double pickUpConeY = -40;
-    public static double pickUpConeAngle = Math.toRadians(-258);
+    public static double pickUpConeX = 0;
+    public static double pickUpConeY = -0;
+    public static double pickUpConeAngle = Math.toRadians(0);
 
-    public static double scoreLowX = 31;
-    public static double scoreLowY = -40;
-    public static double scoreLowAngle = Math.toRadians(-258);
+    public static double faceWallX = 0;
+    public static double faceWallY = 0;
+    public static double faceWallAngle = Math.toRadians(0);
 
-    public static double pickUpCone2X = 31;
-    public static double pickUpCone2Y = -40;
-    public static double pickUpCone2Angle = Math.toRadians(-258);
+    public static double scoreLowX = 0;
+    public static double scoreLowY = 0;
+    public static double scoreLowAngle = Math.toRadians(0);
 
+    public static double turnFromScoreX = 0;
+    public static double turnFromScoreY = 0;
+    public static double turnFromScoreAngle = Math.toRadians(0);
 
+    public static double parkUnoX = 0;
+    public static double parkUnoY = 0;
+    public static double parkUnoAngle = Math.toRadians(0);
+
+    public static double parkDosX = 0;
+    public static double parkDosY = 0;
+    public static double parkDosAngle = Math.toRadians(0);
+
+    public static double parkTresX = 0;
+    public static double parkTresY = 0;
+    public static double parkTresAngle = Math.toRadians(0);
 
     public static double startWait = 0;
+
+    int cycleCount;
 
     lowJunctionAuto.State currentState = lowJunctionAuto.State.IDLE;
 
@@ -73,9 +90,11 @@ public class lowJunctionAuto extends LinearOpMode{
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         VuforiaBitMap vuforia = new VuforiaBitMap(this);
+        Movement move = new Movement(hardwareMap);
+        Manipulators manip = new Manipulators(hardwareMap);
 
-        int pos = vuforia.LeftPostionVision();
-        telemetry.addData("Pos: ", pos);
+        int parkPos = vuforia.LeftPostionVision();
+        telemetry.addData("Pos: ", parkPos);
         telemetry.update();
 
         drive.setPoseEstimate(startPose);
@@ -100,8 +119,12 @@ public class lowJunctionAuto extends LinearOpMode{
         Trajectory turnToAlign = drive.trajectoryBuilder(goToStack.end())
                 .lineToLinearHeading(new Pose2d(turnToAlignX, turnToAlignY, turnToAlignAngle))
                 .build();
-/*
-        Trajectory pickUpCone = drive.trajectoryBuilder(turnToAlign.end())
+
+        Trajectory faceWall = drive.trajectoryBuilder(turnToAlign.end())
+                .lineToLinearHeading(new Pose2d(faceWallX, faceWallY, faceWallAngle))
+                .build();
+
+        Trajectory pickUpCone = drive.trajectoryBuilder(faceWall.end())
                 .lineToLinearHeading(new Pose2d(pickUpConeX, pickUpConeY, pickUpConeAngle))
                 .build();
 
@@ -109,19 +132,22 @@ public class lowJunctionAuto extends LinearOpMode{
                 .lineToLinearHeading(new Pose2d(scoreLowX, scoreLowY, scoreLowAngle))
                 .build();
 
-        Trajectory pickUpCone2 = drive.trajectoryBuilder(scoreLow.end())
-                .lineToLinearHeading(new Pose2d(scoreLowX, scoreLowY, scoreLowAngle))
+        Trajectory turnFromScore = drive.trajectoryBuilder(scoreLow.end())
+                .lineToLinearHeading(new Pose2d(turnFromScoreX, turnFromScoreY, turnFromScoreAngle))
                 .build();
 
-
-        Trajectory pos_dos = drive.trajectoryBuilder(align2.end())
-                .lineToLinearHeading(new Pose2d(align2x, (align2y+20), align2angle))
+        Trajectory pos_uno = drive.trajectoryBuilder(scoreLow.end())
+                .lineToLinearHeading(new Pose2d(parkUnoX, (parkUnoY), parkUnoAngle))
                 .build();
 
-        Trajectory pos_tres = drive.trajectoryBuilder(align2.end())
-                .lineToLinearHeading(new Pose2d(align2x, (align2y+(23*2)), align2angle))
+        Trajectory pos_dos = drive.trajectoryBuilder(scoreLow.end())
+                .lineToLinearHeading(new Pose2d(parkDosX, (parkDosY), parkDosAngle))
                 .build();
-*/
+
+        Trajectory pos_tres = drive.trajectoryBuilder(scoreLow.end())
+                .lineToLinearHeading(new Pose2d(parkTresX, (parkTresY), parkTresAngle))
+                .build();
+
 
         currentState = lowJunctionAuto.State.WAIT;
 
@@ -159,44 +185,65 @@ public class lowJunctionAuto extends LinearOpMode{
 
                 case TURN_TO_ALIGN_STACK:
                     drive.followTrajectory(turnToAlign);
-                    currentState = State.IDLE;
 
-/*
+                    while (!manip.colorIsActive()) {
+                        move.setPowers(1,0.8,0.8,0.9333333);
+                    }
+
+                    manip.clawClose();
+                    manip.moveLiftTo(300);
+                    wait(500);
+                    manip.clawOpen();
+
+                    drive.followTrajectory(faceWall);
+
+                    currentState = State.GO_FORWARD_PICK_UP_CONE;
+
+
                     break;
 
                 case GO_FORWARD_PICK_UP_CONE:
+
+                    if (cycleCount > 1) {
+                        manip.moveLiftTo(300);
+                        wait(500 - cycleCount*10);
+                        manip.clawOpen();
+                    }
+
                     drive.followTrajectory(pickUpCone);
+
+                    manip.clawClose();
+
+                    manip.moveLiftTo(500);
+
                     currentState = State.SCORE_LOW;
 
+                    cycleCount++;
 
                     break;
 
                 case SCORE_LOW:
+
                     drive.followTrajectory(scoreLow);
-                    currentState = State.GO_FORWARD_PICK_UP_CONE2;
 
+                    manip.clawOpen();
 
-                    break;
+                    drive.followTrajectory(turnFromScore);
 
-                case GO_FORWARD_PICK_UP_CONE2:
-                    drive.followTrajectory(pickUpCone2);
-                    currentState = State.SCORE_LOW;
+                    manip.clawClose();
 
+                    manip.returnLiftToDefault();
 
-                    break;
-
-                case SCORE_LOW2:
-                    drive.followTrajectory(scoreLow);
-                    currentState = State.PARK;
-
+                    currentState = State.GO_FORWARD_PICK_UP_CONE;
 
                     break;
 
                 case PARK:
-                    if      (pos==1){
+                    if (parkPos == 1){
+                        drive.followTrajectory(pos_uno);
                         currentState = lowJunctionAuto.State.IDLE;
                     }
-                    else if (pos==2){
+                    else if (parkPos == 2){
                         drive.followTrajectory(pos_dos);
                         currentState = lowJunctionAuto.State.IDLE;
                     }
@@ -205,7 +252,7 @@ public class lowJunctionAuto extends LinearOpMode{
                         currentState = lowJunctionAuto.State.IDLE;
                     }
                     break;
-*/
+
                 case IDLE:
 
                     break;

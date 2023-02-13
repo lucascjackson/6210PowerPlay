@@ -27,7 +27,6 @@ public class Testing extends OpMode {
     double leftX;
     double rightX;
 
-
     public void init() {
         move = new Movement(hardwareMap);
         manip = new Manipulators(hardwareMap);
@@ -100,7 +99,13 @@ public class Testing extends OpMode {
             motorPower = move.holonomicDrive(0, 0, 0);
         }
 
+        if (isPressed("dpad_up1", gamepad1.dpad_up)) {
+            manip.moveLiftTo(-1000);
+        }
 
+        if (isPressed("dpad_down1", gamepad1.dpad_down)) {
+            manip.returnLiftToDefault();
+        }
 
         move.setPowers(motorPower[0]*FRM, motorPower[1]*FLM, motorPower[2]*BRM, motorPower[3]*BLM);
 
@@ -110,6 +115,9 @@ public class Testing extends OpMode {
         telemetry.addData("BL power: ", BLM);
         telemetry.addData("Blue: ", manip.colorBlue());
         telemetry.addData("Red: ", manip.colorRed());
+        telemetry.addData("lift1:", manip.lift1.getCurrentPosition());
+        telemetry.addData("lift2:", manip.lift2.getCurrentPosition());
+
 
         telemetry.update();
     }
