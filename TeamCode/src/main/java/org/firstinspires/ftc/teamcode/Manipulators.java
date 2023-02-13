@@ -1,15 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 
 @Config
 public class Manipulators {
@@ -33,9 +35,9 @@ public class Manipulators {
     private LinearOpMode opMode;
 
     //color sensor
-    public ColorSensor colorSensorFront;
-    public ColorSensor colorSensorBack;
-    //public ColorSensor color;
+
+    public ColorSensor colorSensor;
+
 
     //Hardware Map
     public Manipulators(HardwareMap robot) {
@@ -49,8 +51,8 @@ public class Manipulators {
         claw = robot.get(Servo.class, "claw");
 
         //color sensor
-        colorSensorBack = robot.colorSensor.get("colorSensorBack");
-        colorSensorFront = robot.colorSensor.get("colorSensorFront");
+        colorSensor = robot.get(ColorSensor.class, "colorSensor");
+
 
         //lift Encoders
         lift1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -99,47 +101,21 @@ public class Manipulators {
         return open;
     }
 
-    public boolean colorBackIsActive() {
-        if (colorSensorBack.red() > 0 || colorSensorBack.blue() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean colorFrontIsActive() {
-        if (colorSensorFront.red() > 0 || colorSensorFront.blue() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /*
     public boolean colorIsActive() {
-        if (color.red() > 0 || color.blue() > 0) {
+        if (colorSensor.red() > 100 || colorSensor.blue() > 100) {
             return true;
         } else {
             return false;
         }
     }
 
-     */
 
-    public int colorRedBack() {
-        return colorSensorBack.red();
+    public int colorRed() {
+        return colorSensor.red();
     }
 
-    public int colorBlueBack() {
-        return colorSensorBack.blue();
-    }
-
-    public int colorRedFront() {
-        return colorSensorFront.red();
-    }
-
-    public int colorBlueFront() {
-        return colorSensorFront.blue();
+    public int colorBlue() {
+        return colorSensor.blue();
     }
 
 }

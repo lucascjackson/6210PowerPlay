@@ -24,6 +24,7 @@ public class lowJunctionRed extends LinearOpMode{
     Manipulators manip;
     Movement move;
     private DcMotor lift2;
+    private DcMotor lift1;
     public DigitalChannel liftSensor;
 
     enum State {
@@ -39,8 +40,8 @@ public class lowJunctionRed extends LinearOpMode{
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
     Pose2d posEstimate;
 
-    public static double goToWallX = 70;
-    public static double goToWallY = 0;
+    public static double goToWallX = 0;
+    public static double goToWallY = 22.5;
     public static double goToWallAngle = 0;
 
     public static double moveAlongWallX = 70;
