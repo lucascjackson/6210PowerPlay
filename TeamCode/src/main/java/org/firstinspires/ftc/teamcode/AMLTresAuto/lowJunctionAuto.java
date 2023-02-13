@@ -234,6 +234,11 @@ public class lowJunctionAuto extends LinearOpMode{
 
                     manip.returnLiftToDefault();
 
+                    if (cycleCount > 2) {
+
+                        currentState = State.PARK;
+                    }
+
                     currentState = State.GO_FORWARD_PICK_UP_CONE;
 
                     break;
