@@ -191,7 +191,7 @@ public class lowJunctionAuto extends LinearOpMode{
                     }
 
                     manip.clawClose();
-                    manip.moveLiftTo(300);
+                    //manip.moveLiftTo(300);
                     wait(500);
                     manip.clawOpen();
 
@@ -205,7 +205,7 @@ public class lowJunctionAuto extends LinearOpMode{
                 case GO_FORWARD_PICK_UP_CONE:
 
                     if (cycleCount > 1) {
-                        manip.moveLiftTo(300);
+                        //manip.moveLiftTo(300);
                         wait(500 - cycleCount*10);
                         manip.clawOpen();
                     }
@@ -214,7 +214,7 @@ public class lowJunctionAuto extends LinearOpMode{
 
                     manip.clawClose();
 
-                    manip.moveLiftTo(500);
+                    //manip.moveLiftTo(500);
 
                     currentState = State.SCORE_LOW;
 
@@ -232,7 +232,7 @@ public class lowJunctionAuto extends LinearOpMode{
 
                     manip.clawClose();
 
-                    manip.returnLiftToDefault();
+                    //manip.returnLiftToDefault();
 
                     if (cycleCount > 2) {
 
