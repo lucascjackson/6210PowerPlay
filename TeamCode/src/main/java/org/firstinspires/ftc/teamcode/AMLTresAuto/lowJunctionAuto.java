@@ -1,25 +1,16 @@
 package org.firstinspires.ftc.teamcode.AMLTresAuto;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import android.text.method.MovementMethod;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.AMLOneAutos.BetterOdomPark;
 import org.firstinspires.ftc.teamcode.Manipulators;
 import org.firstinspires.ftc.teamcode.Movement;
-import org.firstinspires.ftc.teamcode.VuforiaBitMap;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.VuforiaBitMap3;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
 @Autonomous(name = "lowJunctionAuto", group = "Autonomous")
@@ -32,7 +23,7 @@ public class lowJunctionAuto extends LinearOpMode{
         GO_TO_WALL,
         GO_TO_STACK,
         TURN_TO_ALIGN_STACK,
-        GO_FORWARD_PICK_UP_CONE,
+        GO_FORWARD,
         SCORE_LOW,
         PARK
     }
@@ -43,6 +34,7 @@ public class lowJunctionAuto extends LinearOpMode{
 
     Pose2d posEstimate;
 
+    public static double accuracyVar = 0.5;
 
     public static double goToWallX = -3;
     public static double goToWallY = -70;
@@ -61,8 +53,8 @@ public class lowJunctionAuto extends LinearOpMode{
     public static double faceWallAngle = 5.236;
 
     public static double pickUpConeX = -2;
-    public static double pickUpConeY = 15;
-    public static double pickUpConeAngle = 5.3;
+    public static double pickUpConeY = 23;
+    public static double pickUpConeAngle = 5.29;
 
     public static double scoreLowX = -2;
     public static double scoreLowY = 0;
@@ -94,12 +86,12 @@ public class lowJunctionAuto extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        VuforiaBitMap vuforia = new VuforiaBitMap(this);
+        VuforiaBitMap3 vuforia = new VuforiaBitMap3(this);
         Movement move = new Movement(hardwareMap);
         Manipulators manip = new Manipulators(hardwareMap);
 
-        int parkPos = vuforia.LeftPostionVision();
-        telemetry.addData("Pos: ", parkPos);
+        int pos = (int) vuforia.leftPositionVision();
+        telemetry.addData("Pos: ", pos);
         telemetry.update();
 
         drive.setPoseEstimate(startPose);
@@ -209,18 +201,20 @@ public class lowJunctionAuto extends LinearOpMode{
 
                     move.setPowers(0,0,0,0);
 
-                    currentState = State.GO_FORWARD_PICK_UP_CONE;
+                    currentState = State.GO_FORWARD;
 
 
                     break;
 
-                case GO_FORWARD_PICK_UP_CONE:
+                case GO_FORWARD:
 
                     drive.followTrajectory(pickUpCone);
 
                     //drive.followTrajecto f300ry(pickUpCone);
 
                     manip.clawClose();
+
+                    sleep(1000);
 
                     //manip.moveLiftTo(500);
 
@@ -246,11 +240,11 @@ public class lowJunctionAuto extends LinearOpMode{
                     break;
 
                 case PARK:
-                    /*if (parkPos == 1){
+                    /*if (pos == 1){
                         drive.followTrajectory(pos_uno);
                         currentState = lowJunctionAuto.State.IDLE;
                     }
-                    else if (parkPos == 2){
+                    else if (pos == 2){
                         drive.followTrajectory(pos_dos);
                         currentState = lowJunctionAuto.State.IDLE;
                     }
