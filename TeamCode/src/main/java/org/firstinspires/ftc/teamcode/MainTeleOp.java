@@ -152,14 +152,13 @@ public class MainTeleOp extends OpMode {
             rightX = (-gamepad1.right_stick_x)/1.5;
 
             motorPower = move.holonomicDrive(leftX/halfspeedDivider, leftY/halfspeedDivider, rightX/halfspeedDivider);
-
         }
 
         else {
             motorPower = move.holonomicDrive(0, 0, 0);
         }
 
-        move.setPowers(motorPower[0], motorPower[1]*0.8, motorPower[2]*0.8, motorPower[3]*0.9333333333);
+        move.setPowers(motorPower[0], motorPower[1], motorPower[2], motorPower[3]);
 
         //Lift MACROS
 

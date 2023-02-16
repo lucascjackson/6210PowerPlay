@@ -28,16 +28,16 @@ BetterOdomPark extends LinearOpMode {
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
     Pose2d posEstimate;
 
-    public static double pos2X = 60;
+    public static double pos2X = -29;
     public static int pos2Y = 0;
     public static double pos2Angle = Math.toRadians(0);
 
-    public static double pos1X = 60;
-    public static double pos1Y = -70;
+    public static double pos1X = -29;
+    public static double pos1Y = -60;
     public static double pos1Angle = Math.toRadians(0);
 
-    public static double pos3X = 60;
-    public static  double pos3Y = -70;
+    public static double pos3X = -38;
+    public static  double pos3Y = 54;
     public static double pos3Angle = Math.toRadians(0);
 
     public static double startWait = 0;

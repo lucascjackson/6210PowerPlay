@@ -74,7 +74,7 @@ public class Manipulators {
         lift1.setPower(power);
     }
 
-    public void moveLiftTo(int pos) {
+    public void moveLift(int pos) {
 
         powerLift(-0.7);
 
@@ -118,7 +118,7 @@ public class Manipulators {
     }
 
     public boolean colorIsActive() {
-        if (colorSensor.red() > 100 || colorSensor.blue() > 100) {
+        if (colorSensor.red() > 160 || colorSensor.blue() > 200) {
             return true;
         } else {
             return false;

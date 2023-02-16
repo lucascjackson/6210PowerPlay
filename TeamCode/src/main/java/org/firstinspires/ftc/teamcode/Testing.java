@@ -100,7 +100,7 @@ public class Testing extends OpMode {
         }
 
         if (isPressed("dpad_up1", gamepad1.dpad_up)) {
-            manip.moveLiftTo(-1000);
+            manip.moveLift(-1000);
         }
 
         if (isPressed("dpad_down1", gamepad1.dpad_down)) {
