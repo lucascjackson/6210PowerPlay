@@ -193,6 +193,9 @@ public class MainTeleOp extends OpMode {
         telemetry.addData("Lift Position: ",stringPos );
         telemetry.addData("StickY: ", gamepad2.right_stick_y);
         telemetry.addData("isInDefault: ", manip.liftIsDefault());
+        telemetry.addData("lift1Encoder", manip.lift1.getCurrentPosition());
+        telemetry.addData("lift2Encoder", manip.lift1.getCurrentPosition());
+
         telemetry.update();
 
 

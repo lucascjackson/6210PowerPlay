@@ -30,7 +30,7 @@ public class lowJunctionAuto extends LinearOpMode{
 
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(180));
     Pose2d startPose2 = new Pose2d(0, 0, Math.toRadians(180));
-    Pose2d startPose3 = new Pose2d(0, 0, Math.toRadians(180));
+    Pose2d startPose3 = new Pose2d(0, 0, Math.toRadians(0));
 
     Pose2d posEstimate;
 
@@ -56,9 +56,17 @@ public class lowJunctionAuto extends LinearOpMode{
     public static double pickUpConeY = 23;
     public static double pickUpConeAngle = 5.29;
 
-    public static double scoreLowX = -2;
-    public static double scoreLowY = 0;
-    public static double scoreLowAngle = 5.7;
+    public static double moveBack = 4;
+
+    public static double scoreLowX = -4;
+    public static double scoreLowY = 4;
+    public static double scoreLowAngle = Math.toRadians(2.18166);
+
+    public static double turnBackX = -4;
+    public static double turnBackY = 0;
+    public static double turnBackAngle= 0;
+
+    public static double moveForward = 4;
 
     public static double turnFromScoreX = 0;
     public static double turnFromScoreY = 0;
@@ -125,14 +133,16 @@ public class lowJunctionAuto extends LinearOpMode{
                 .lineToLinearHeading(new Pose2d(pickUpConeX, pickUpConeY, pickUpConeAngle))
                 .build();
 
-        Trajectory scoreLow = drive.trajectoryBuilder(pickUpCone.end())
+        Trajectory scoreLow = drive.trajectoryBuilder(startPose3)
+                .back(moveBack)
                 .lineToLinearHeading(new Pose2d(scoreLowX, scoreLowY, scoreLowAngle))
                 .build();
-/*
+
         Trajectory turnFromScore = drive.trajectoryBuilder(scoreLow.end())
                 .lineToLinearHeading(new Pose2d(turnFromScoreX, turnFromScoreY, turnFromScoreAngle))
+                .forward(moveForward)
                 .build();
-
+/*
         Trajectory pos_uno = drive.trajectoryBuilder(scoreLow.end())
                 .lineToLinearHeading(new Pose2d(parkUnoX, (parkUnoY), parkUnoAngle))
                 .build();
@@ -168,8 +178,8 @@ public class lowJunctionAuto extends LinearOpMode{
                 case GO_TO_WALL:
 
                     drive.followTrajectory(goToWall);
-                    currentState = State.GO_TO_STACK;
 
+                    currentState = State.GO_TO_STACK;
 
                     break;
 
@@ -210,13 +220,10 @@ public class lowJunctionAuto extends LinearOpMode{
 
                     drive.followTrajectory(pickUpCone);
 
-                    //drive.followTrajecto f300ry(pickUpCone);
 
                     manip.clawClose();
 
                     sleep(1000);
-
-                    //manip.moveLiftTo(500);
 
                     currentState = State.SCORE_LOW;
 
@@ -227,6 +234,7 @@ public class lowJunctionAuto extends LinearOpMode{
                 case SCORE_LOW:
 
                     manip.moveLift(-1000);
+
                     drive.followTrajectory(scoreLow);
 
                     //drive.followTrajectory(turnFromScore);
