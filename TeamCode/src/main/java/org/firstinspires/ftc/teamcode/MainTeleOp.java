@@ -142,7 +142,6 @@ public class MainTeleOp extends OpMode {
             halfspeedDivider= 1;
         }
 
-
         if (Math.abs(gamepad1.left_stick_y)  > 0.1 ||
             Math.abs(gamepad1.left_stick_x)  > 0.1 ||
             Math.abs(gamepad1.right_stick_x) > 0.1) {
@@ -150,7 +149,6 @@ public class MainTeleOp extends OpMode {
             leftY = gamepad1.left_stick_y/1.5;
             leftX = -1*(gamepad1.left_stick_x);
             rightX = (-gamepad1.right_stick_x)/1.5;
-
             motorPower = move.holonomicDrive(leftX/halfspeedDivider, leftY/halfspeedDivider, rightX/halfspeedDivider);
         }
 

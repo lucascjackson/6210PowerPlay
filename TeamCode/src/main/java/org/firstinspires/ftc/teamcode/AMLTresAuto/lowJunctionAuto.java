@@ -39,7 +39,7 @@ public class lowJunctionAuto extends LinearOpMode{
     public static double goToWallY = -70;
     public static double gotoWallAngle = Math.toRadians(180);
 
-    public static double goToStackX =-38;
+    public static double goToStackX =-35;
     public static double goToStackY = -70;
     public static double goToStackAngle = Math.toRadians(180);
 
@@ -49,39 +49,29 @@ public class lowJunctionAuto extends LinearOpMode{
 
     public static double faceWallX = 0;
     public static double faceWallY = 10;
-    public static double faceWallAngle = 5.236;
+    public static double faceWallAngle = 5.0;
 
-    public static double pickUpConeX = -2;
+    public static double pickUpConeX = 0;
     public static double pickUpConeY = 21;
     public static double pickUpConeAngle = 5.29;
 
     public static double moveBack = 15 ;
 
     public static double scoreLowX = 20 ;
-    public static double scoreLowY = 0;
-    public static double scoreLowAngle = Math.toRadians(-125);
+    public static double scoreLowY = 5;
+    public static double scoreLowAngle = -2.65;
 
-    public static double turnBackX = -4;
-    public static double turnBackY = 10;
-    public static double turnBackAngle= 0;
+    public static double parkUnoX = 28;
+    public static double ParkUnoY = -20;
+    public static double parkUnoAngle = -2.65;
 
-    public static double moveForward = 4;
+    public static double parkDosX = 28;
+    public static double parkDosY = 20;
+    public static double parkDosAngle = -2.52;
 
-    public static double turnFromScoreX = 0;
-    public static double turnFromScoreY = 0;
-    public static double turnFromScoreAngle = Math.toRadians(0);
-
-    public static double parkUnoX = 0;
-    public static double parkUnoY = 0;
-    public static double parkUnoAngle = Math.toRadians(0);
-
-    public static double parkDosX = 0;
-    public static double parkDosY = 0;
-    public static double parkDosAngle = Math.toRadians(0);
-
-    public static double parkTresX = 0;
-    public static double parkTresY = 0;
-    public static double parkTresAngle = Math.toRadians(0);
+    public static double parkTresX = 28;
+    public static double parkTresY = 20;
+    public static double parkTresAngle = -2.52;
 
     public static double startWait = 0;
 
@@ -132,23 +122,17 @@ public class lowJunctionAuto extends LinearOpMode{
                 .lineToLinearHeading(new Pose2d(scoreLowX, scoreLowY, scoreLowAngle))
                 .build();
 
-        TrajectorySequence turnFromScore = drive.trajectorySequenceBuilder(scoreLow.end())
-                .lineToLinearHeading(new Pose2d(turnFromScoreX, turnFromScoreY, turnFromScoreAngle))
-                .back(moveForward)
-                .build();
-/*
-        Trajectory pos_uno = drive.trajectoryBuilder(scoreLow.end())
-                .lineToLinearHeading(new Pose2d(parkUnoX, (parkUnoY), parkUnoAngle))
+        TrajectorySequence pos_uno = drive.trajectorySequenceBuilder(scoreLow.end())
+                .lineToLinearHeading(new Pose2d(parkUnoX, ParkUnoY, parkUnoAngle))
                 .build();
 
-        Trajectory pos_dos = drive.trajectoryBuilder(scoreLow.end())
-                .lineToLinearHeading(new Pose2d(parkDosX, (parkDosY), parkDosAngle))
+        TrajectorySequence pos_dos = drive.trajectorySequenceBuilder(scoreLow.end())
+                .lineToLinearHeading(new Pose2d(parkDosX, parkDosY, parkDosAngle))
                 .build();
 
-        Trajectory pos_tres = drive.trajectoryBuilder(scoreLow.end())
-                .lineToLinearHeading(new Pose2d(parkTresX, (parkTresY), parkTresAngle))
+        TrajectorySequence pos_tres = drive.trajectorySequenceBuilder(scoreLow.end())
+                .lineToLinearHeading(new Pose2d(parkTresX, parkTresY, parkTresAngle))
                 .build();
-        */
 
         currentState = lowJunctionAuto.State.WAIT;
 
@@ -176,6 +160,7 @@ public class lowJunctionAuto extends LinearOpMode{
                     manip.clawClose();
 
                     drive.followTrajectory(turnToAlign);
+
 
                     while (!manip.colorIsActive()) {
                         move.setPowers(0.375,0.3,0.3,0.34999995);
@@ -205,49 +190,33 @@ public class lowJunctionAuto extends LinearOpMode{
 
                 case CYCLE_LOW:
 
-                    if (cycleCount > 0) {
-
-                        manip.clawClose();
-
-                        sleep(800);
-                    }
-
                     manip.moveLift(-1000);
 
                     drive.followTrajectorySequence(scoreLow);
 
                     manip.clawOpen();
                     sleep(500);
-                    manip.moveLift(1000);
 
-                    drive.followTrajectorySequence(turnFromScore);
-
-                    if (cycleCount == 2) {
-
-                        currentState = State.PARK;
-                    }
-
-                    cycleCount++;
-
-                    currentState = State.IDLE;
+                    currentState = State.PARK;
 
                     break;
-/*
+
                 case PARK:
                     if (pos == 1) {
+                        drive.followTrajectorySequence(pos_uno);
                         currentState = lowJunctionAuto.State.IDLE;
                     }
                     else if (pos == 2){
-                        drive.followTrajectory(pos_dos);
+                        drive.followTrajectorySequence(pos_dos);
                         currentState = lowJunctionAuto.State.IDLE;
                     }
                     else{
-                        drive.followTrajectory(pos_tres);
+                        drive.followTrajectorySequence(pos_tres);
                         currentState = lowJunctionAuto.State.IDLE;
                     }
 
                     break;
-*/
+
                 case IDLE:
 
                     break;
